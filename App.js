@@ -1,35 +1,83 @@
-import React from 'react';
-import { Alert, Image, Text, StyleSheet, View, ScrollView, TouchableOpacity, TextInput, Button } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { Input } from 'react-native-elements';
+import { Alert, Image, Text, StyleSheet, View, ScrollView, TouchableOpacity, TextInput, Button, VirtualizedList } from 'react-native';
 import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from 'firebase/auth';
 import { BlurView } from 'expo-blur';
 import {initializeApp} from 'firebase/app';
 import { firebaseConfig } from './config/firebase-config';
+import { getFirestore, collection, getDocs } from "firebase/firestore";
+
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import ListInvoices from './components/invoice/InvoiceListing';
 
 const cesarLogo = 'https://www.cesar.org.br/image/layout_set_logo?img_id=1086110&t=1673865791645';
 
-function HomeScreen() {
+const SearchIcon = () => {
+  const [input, setInput] = useState('');
+  return (
+    <View style={{flex: 1, justifyContent: 'center', paddingTop: 20}}>
+      <Input
+        inputContainerStyle={{
+        backgroundColor: '#efefef',
+        borderRadius: 8,
+        borderBottomWidth: 0,
+        }}
+        placeholder='Buscar por nota fiscal'
+        value={input}
+        onChange={(value) => setInput(value)}
+        leftIcon={
+          <Icon
+            style={{paddingLeft:10}}
+            name='search'
+            size={14}
+            color='black'
+          />
+        }
+      />
+    </View>
+  );
+};
 
+const AddInvoice = ({onHandleScan}) => {
+    return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Button title='Adicionar Nota Fiscal' onPress={() => onHandleScan()}></Button>
+    </View>
+  );
+}
+
+function HomeScreen() {
   const navigation = useNavigation();
 
   const handleScan = () => {
     navigation.navigate('Scan');
   }
 
-
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Tela Principal</Text>
-      <Button title='Scan' onPress={handleScan}></Button>
+    <View
+      style={[styles.containerInvoiceListing,
+        {
+          flexDirection: 'column',
+        },
+      ]}>
+      <View style={{flex: 1, justifyContent: 'center', backgroundColor: 'white'}}>
+        <SearchIcon/>
+      </View>
+      <View style={{flex: 8, backgroundColor: 'white'}}>
+        <ListInvoices/>
+      </View>
+      <View style={{flex: 1, justifyContent: 'center'}}>
+        <AddInvoice onHandleScan={handleScan}/>
+      </View>
     </View>
-  );
+  )
 }
 
 function ScanScreen() {
-
   const navigation = useNavigation();
 
   return (
@@ -41,8 +89,8 @@ function ScanScreen() {
 
 function LoginScreen()  {
 
-  const [email, setEmail] = React.useState(null);
-  const [password, setPassword] = React.useState(null);
+  const [email, setEmail] = React.useState('apa@cesar.org.br');
+  const [password, setPassword] = React.useState('123456');
   const navigation = useNavigation();
 
   const app = initializeApp(firebaseConfig);
@@ -141,6 +189,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  containerInvoiceListing: {
+    padding: 10,
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+  },
   button: {
     width: 250,
     height: 40,
@@ -167,5 +220,13 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     backgroundColor: '#ffffff90',
     marginBottom: 20,
-  }
+  },
+  imageStyle: {
+    padding: 10,
+    margin: 5,
+    height: 25,
+    width: 25,
+    resizeMode: 'stretch',
+    alignItems: 'center',
+  },
 });
