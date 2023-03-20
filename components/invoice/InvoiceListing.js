@@ -69,7 +69,7 @@ const ListInvoices = () => {
   };
 
   const ItemSeparator = () => {
-    if (invoices && invoices.length !== 0 ) {
+    if (invoices) {
       return (
         <View
           style={{
@@ -84,7 +84,7 @@ const ListInvoices = () => {
 
   return (
     <SafeAreaView>
-      {invoices && invoices.length !== 0 && (
+      {invoices && (
         <VirtualizedList
           initialNumToRender={4}
           renderItem={renderItem}
