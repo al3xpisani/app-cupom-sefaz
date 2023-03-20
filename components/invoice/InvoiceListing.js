@@ -12,30 +12,15 @@ import {
   SafeAreaView,
   VirtualizedList,
 } from "react-native";
-import { initializeApp } from "firebase/app";
-import { firebaseConfig } from "../../config/firebase-config";
-import { getFirestore, collection, getDocs, query, where } from "firebase/firestore";
 import { TimeStamp } from "../../utils/TimeStamp";
 import { zeqContext } from "../../App";
-
-const getInvoices = async (loggedUser) => {
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  const firebaseQuery = query(collection(db, "nota-fiscal"), where("email", "==", loggedUser));
-
-  let invoices = [];
-  const querySnapshot = await getDocs(firebaseQuery);
-  querySnapshot.forEach((doc) => {
-    invoices.push(doc.data());
-  });
-  return invoices;
-};
+import fetchFirebaseData from "../../config/fetchFirebaseData";
 
 const ListInvoices = () => {
   const {loggedUser} = useContext(zeqContext);
   const [invoices, setInvoices] = useState(null);
   useEffect(() => {
-    getInvoices(loggedUser).then((item) => setInvoices(item));
+    fetchFirebaseData("nota-fiscal","email",loggedUser).then((item) => setInvoices(item));
   }, []);
 
   const getItem = (_data, index) => {
