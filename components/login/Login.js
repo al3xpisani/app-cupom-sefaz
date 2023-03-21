@@ -8,7 +8,6 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
-  TextInput,
   Button,
   Pressable,
 } from "react-native";
@@ -22,6 +21,7 @@ import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../../config/firebase-config";
 import { useNavigation, StackActions } from "@react-navigation/native";
 import { zeqContext } from "../../context/context";
+import { TextInput } from "react-native-paper";
 
 const cesarLogo =
   "https://www.cesar.org.br/image/layout_set_logo?img_id=1086110&t=1673865791645";
@@ -31,6 +31,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const { setLoggedUser } = useContext(zeqContext);
   const [navigateToHome, setNavigateToHome] = useState(false);
+  const [secureTextEntry, setSecureTextEntry] = useState(true);
 
   const navigation = useNavigation();
 
@@ -125,20 +126,30 @@ function Login() {
           Login Account
         </Text>
         <View>
-          <Text style={{ fontSize: 17, fontWeight: "400" }}>Email</Text>
+          {/* <Text style={{ fontSize: 17, fontWeight: "400" }}>Email</Text> */}
           <TextInput
             onChangeText={(text) => setEmail(text)}
-            style={styles.input}
-            placeholder="Email"
+            // style={styles.input}
+            // placeholder="Email"
+            label="Email"
+            mode="outlined"
           />
         </View>
         <View>
-          <Text style={{ fontSize: 17, fontWeight: "400" }}>Password</Text>
+          {/* <Text style={{ fontSize: 17, fontWeight: "400" }}>Password</Text> */}
           <TextInput
-            secureTextEntry={true}
+            size="large"
+            secureTextEntry={secureTextEntry}
             onChangeText={(text) => setPassword(text)}
-            style={styles.input}
-            placeholder="Senha"
+            // style={styles.input}
+            label="Senha"
+            mode="outlined"
+            right={
+              <TextInput.Icon
+                icon="eye"
+                onPress={() => setSecureTextEntry(!secureTextEntry)}
+              />
+            }
           />
         </View>
 
