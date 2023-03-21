@@ -5,50 +5,9 @@ import { useNavigation } from '@react-navigation/native';
 import NfeAPI from '../../services/NFeAPI';
 import { zeqContext } from "../../context/context";
 import {app, db, getFirestore, collection, addDoc} from "../../config/firebase-config";
+import {fetchFirebaseExistingInvoice} from "../../config/fetchFirebaseData";
 
 const MAX_ATTEMPTS = 10;
-
-
-// const searchQRCode = async (qrCodeData) => {
-//     let attempts = 0;
-
-//     while (attempts < MAX_ATTEMPTS) {
-//         try {
-//             const response = await NfeAPI.post('consulta/qr-code/', {
-//                 qrcode: qrCodeData,
-//                 estado: 'PE', //Modificar para tratar outros estados
-//                 assincrono: true,
-//                 url_notificacao: "https://cesar.org.br"
-//             });
-            
-//             // alert(JSON.stringify(response.data));
-            
-//             if (response.data.status === 'concluido') {
-//                 return response.data;
-//             } else {
-//                 await new Promise(resolve => setTimeout(resolve, 300));
-//             }
-//         } catch (error) {
-//             alert("Erro"+JSON.stringify(error));
-//             console.log(error);
-//             attempts++;
-//         }
-//     }
-
-//     throw new Error('Tentativas excedidas');
-// }
-    
-
-
-// async function searchQRCode(qrCodeData) {
-//     const response = await NfeAPI.post('consulta/qr-code/', {
-//         qrcode: qrCodeData,
-//         estado: 'PE', //Modificar para tratar outros estados
-//         assincrono: true,
-//         url_notificacao: "https://cesar.org.br"
-//     });
-//     return response;
-// }
 
 export default function ScanScreen() {
     const [hasPermission, setHasPermission] = useState(null);
@@ -134,6 +93,11 @@ export default function ScanScreen() {
                 nfe.produtos = response.produtos;
                 nfe.status = response.status;
 
+                // if(fetchFirebaseExistingInvoice(nfe.chave, loggedUser) != null) {
+                //     alert('Nota Fiscal já cadastrada!');
+                //     navigation.navigate("Home");
+                //     return;
+                // }
                 addNfe(nfe);
 
         }).catch((error) => { alert(error); });

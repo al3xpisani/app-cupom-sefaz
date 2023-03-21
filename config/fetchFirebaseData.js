@@ -3,8 +3,10 @@ import {
   query,
   where,
   orderBy,
+  addDoc,
+  collection
 } from "firebase/firestore";
-import {app, db, getFirestore, collection,addDoc} from './firebase-config'
+import {app, db, getFirestore} from './firebase-config'
 
 const fetchFirebaseDataMatch = async (
   collectionName,
@@ -29,9 +31,7 @@ const fetchFirebaseDataMatch = async (
 
 export const fetchFirebaseExistingInvoice = async (
     collectionName,
-    searchFieldName,
     searchValue,
-    searchFieldName1,
     searchValue1
   ) => {
     const firebaseQuery = query(
@@ -46,6 +46,14 @@ export const fetchFirebaseExistingInvoice = async (
     });
     return invoices;
   };
+
+  export const addNfe = async(nfe) => {
+    try {
+        const docRef = await addDoc(collection(db, "nota-fiscal"), nfe);
+    } catch (e) {
+        console.error("Falha ao adicionar a NFE: ", e);
+    }
+}
 
 //   export const fetchFirebaseDataLikeArrayField = async (
 //     collectionName,
