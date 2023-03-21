@@ -12,19 +12,30 @@ import {
   SafeAreaView,
   VirtualizedList,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { TimeStamp } from "../../utils/TimeStamp";
 import { zeqContext } from "../../App";
 import fetchFirebaseDataMatch, { fetchFirebaseDataLikeArrayField } from "../../config/fetchFirebaseData";
 
 const ListInvoices = () => {
+    const navigation = useNavigation();
   const { loggedUser } = useContext(zeqContext);
   const [invoices, setInvoices] = useState(null);
   useEffect(() => {
     fetchFirebaseDataMatch("nota-fiscal", "email", loggedUser,"data_emissao",false).then((item) =>
       setInvoices(item)
     );
-    // fetchFirebaseDataLikeArrayField("nota-fiscal","emitente.razao_social",{emitente: {razao_social: 'Cas'}}).then((item) => console.log(item))
-  }, []);
+    console.log(Math.random(1))
+
+    //ignorar essa chamada abaixo. em desenvolvimento.
+    // fetchFirebaseDataLikeArrayField("nota-fiscal","emitente.razao_social","Gamin").then((item) => console.log(item))
+  },[]);
+
+  const handleItemOnPress = (item) => {
+    navigation.navigate("InvoiceItemDetail");
+    // console.log('pressssss', item)
+
+  }
 
   const getItem = (_data, index) => {
     if (index in _data) {
@@ -48,17 +59,19 @@ const ListInvoices = () => {
   const renderItem = ({ item, index }) => {
     return (
       <View style={styles.invoiceListItem}>
-        <View style={{flexDirection:"column"}}>
-          <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-            {item?.title}
-          </Text>
-          <Text style={{ fontSize: 14 }}>{item?.creation_timestamp}</Text>
-        </View>
-        <View>
-          <Text style={{ fontSize: 14, color: "grey" }}>
-            {item?.valor_nota}
-          </Text>
-        </View>
+        <TouchableOpacity onPress={() => handleItemOnPress(item) }>
+            <View style={{flexDirection:"column"}}>
+            <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+                {item?.title}
+            </Text>
+            <Text style={{ fontSize: 14 }}>{item?.creation_timestamp}</Text>
+            </View>
+            <View>
+            <Text style={{ fontSize: 14, color: "grey" }}>
+                {item?.valor_nota}
+            </Text>
+            </View>
+        </TouchableOpacity>
       </View>
     );
   };

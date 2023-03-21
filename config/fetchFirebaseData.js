@@ -34,24 +34,24 @@ const fetchFirebaseDataMatch = async (
   return invoices;
 };
 
-export const fetchFirebaseDataLikeArrayField = async (
-    collectionName,
-    orderByField,
-    searchValueObject,
-  ) => {
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const firebaseQuery = query(
-      collection(db, collectionName), where("emitente.razao_social", "==", "Gaming Sorts")
-    //   collection(db, collectionName), orderBy(orderByField), startAt(searchValueObject)
-    );
+// export const fetchFirebaseDataLikeArrayField = async (
+//     collectionName,
+//     orderByField,
+//     searchValueObject,
+//   ) => {
+//     const app = initializeApp(firebaseConfig);
+//     const db = getFirestore(app);
+//     const firebaseQuery = query(
+//     //   collection(db, collectionName), where("emitente.razao_social", "==", "Gaming Sorts")
+//       collection(db, collectionName), orderBy(orderByField), startAt(searchValueObject)
+//     );
 
-    let invoices = [];
-    const querySnapshot = await getDocs(firebaseQuery);
-    querySnapshot.forEach((doc) => {
-      invoices.push(doc.data());
-    });
-    return invoices;
-  };
+//     let invoices = [];
+//     const querySnapshot = await getDocs(firebaseQuery);
+//     querySnapshot.forEach((doc) => {
+//       invoices.push(doc.data());
+//     });
+//     return invoices;
+//   };
 
 export default fetchFirebaseDataMatch;
