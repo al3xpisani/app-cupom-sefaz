@@ -3,24 +3,56 @@ import { Text, View, StyleSheet, Button } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { useNavigation } from '@react-navigation/native';
 import NfeAPI from '../../services/NFeAPI';
-import { zeqContext } from '../../context/context';
+import { zeqContext } from "../../context/context";
 import {app, db, getFirestore, collection, addDoc} from "../../config/firebase-config2";
 
+const MAX_ATTEMPTS = 10;
 
-async function searchQRCode(qrCodeData) {
-    const response = await NfeAPI.post('consulta/qr-code/', {
-        qrcode: qrCodeData,
-        estado: 'PE', //Modificar para tratar outros estados
-        assincrono: true,
-        url_notificacao: "https://cesar.org.br"
-    });
-    return response;
-}
+
+// const searchQRCode = async (qrCodeData) => {
+//     let attempts = 0;
+
+//     while (attempts < MAX_ATTEMPTS) {
+//         try {
+//             const response = await NfeAPI.post('consulta/qr-code/', {
+//                 qrcode: qrCodeData,
+//                 estado: 'PE', //Modificar para tratar outros estados
+//                 assincrono: true,
+//                 url_notificacao: "https://cesar.org.br"
+//             });
+            
+//             // alert(JSON.stringify(response.data));
+            
+//             if (response.data.status === 'concluido') {
+//                 return response.data;
+//             } else {
+//                 await new Promise(resolve => setTimeout(resolve, 300));
+//             }
+//         } catch (error) {
+//             alert("Erro"+JSON.stringify(error));
+//             console.log(error);
+//             attempts++;
+//         }
+//     }
+
+//     throw new Error('Tentativas excedidas');
+// }
+    
+
+
+// async function searchQRCode(qrCodeData) {
+//     const response = await NfeAPI.post('consulta/qr-code/', {
+//         qrcode: qrCodeData,
+//         estado: 'PE', //Modificar para tratar outros estados
+//         assincrono: true,
+//         url_notificacao: "https://cesar.org.br"
+//     });
+//     return response;
+// }
 
 export default function ScanScreen() {
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
-    const [nfeData, setNfeData] = useState(null);
     const navigation = useNavigation();
     const {loggedUser} = useContext(zeqContext);
 
@@ -29,10 +61,39 @@ export default function ScanScreen() {
             // alert("Salvando no Firebase "+ JSON.stringify(nfe));
             const docRef = await addDoc(collection(db, "nota-fiscal"), nfe);
             console.log("Document written with ID: ", docRef.id);
-            navigation.navigate("Home",{refreshData: true});
+            navigation.navigate("Home");
         } catch (e) {
             console.error("Error adding document: ", e);
         }
+    }
+
+    const searchQRCode = async (qrCodeData) => {
+        let attempts = 0;
+
+        while (attempts < MAX_ATTEMPTS) {
+            try {
+                const response = await NfeAPI.post('consulta/qr-code/', {
+                    qrcode: qrCodeData,
+                    estado: 'PE', //Modificar para tratar outros estados
+                    assincrono: true,
+                    url_notificacao: "https://cesar.org.br"
+                });
+                
+                // alert(JSON.stringify(response.data));
+                
+                if (response.data.status === 'concluido') {
+                    return response.data;
+                } else {
+                    await new Promise(resolve => setTimeout(resolve, 300));
+                }
+            } catch (error) {
+                alert("Erro"+JSON.stringify(error));
+                console.log(error);
+                attempts++;
+            }
+        }
+
+        throw new Error('Tentativas excedidas');
     }
     
     useEffect(() => {
@@ -59,32 +120,21 @@ export default function ScanScreen() {
         }
         
         searchQRCode(qrCodeData).then((response) => {
-            
-            let nfeResponse = response.data;
-            
-            if(nfeResponse.status == 'concluido') {
 
                 let nfe = {};
-                // alert("Logged User: "+loggedUser);
-                 
-                nfe.chave = nfeResponse.chave;
-                nfe.consumidor = nfeResponse.consumidor;
+                nfe.chave = response.chave;
+                nfe.consumidor = response.consumidor;
                 nfe.email = loggedUser;
-                nfe.data_emissao = nfeResponse.data_emissao;
-                nfe.protocolo = nfeResponse.protocolo;
-                nfe.numero = nfeResponse.numero;
-                nfe.serie = nfeResponse.serie;
-                nfe.total = nfeResponse.total;
-                nfe.emitente = nfeResponse.emitente;
-                nfe.produtos = nfeResponse.produtos;
-                nfe.status = nfeResponse.status;
+                nfe.data_emissao = response.data_emissao;
+                nfe.protocolo = response.protocolo;
+                nfe.numero = response.numero;
+                nfe.serie = response.serie;
+                nfe.total = response.total;
+                nfe.emitente = response.emitente;
+                nfe.produtos = response.produtos;
+                nfe.status = response.status;
 
                 addNfe(nfe);
-                // alert(JSON.stringify(nfe));
-                // alert('App: '+JSON.stringify(app));
-            } else if(nfeResponse.status == 'processando') {
-                alert('Erro ao consultar a nota fiscal!');
-            }
 
         }).catch((error) => { alert(error); });
     };
