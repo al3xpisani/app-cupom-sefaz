@@ -60,10 +60,10 @@ export default function ScanScreen() {
         try {
             // alert("Salvando no Firebase "+ JSON.stringify(nfe));
             const docRef = await addDoc(collection(db, "nota-fiscal"), nfe);
-            console.log("Document written with ID: ", docRef.id);
+            console.log("NFE inserida com sucesso: ", docRef.id);
             navigation.navigate("Home");
         } catch (e) {
-            console.error("Error adding document: ", e);
+            console.error("Falha ao adicionar a NFE: ", e);
         }
     }
 
@@ -140,11 +140,11 @@ export default function ScanScreen() {
     };
   
     if (hasPermission === null) {
-      return <Text>Requesting for camera permission</Text>;
+      return <Text>Solicitando acesso à Camera</Text>;
     }
 
     if (hasPermission === false) {
-      return <Text>No access to camera</Text>;
+      return <Text>Sem acesso à Camera</Text>;
     }
   
     return (
