@@ -35,11 +35,6 @@ export default function ScanScreen() {
         }
     }
     
-    // const db = getFirestore(app);
-    // const notaFiscalEntity = collection(db, "nota-fiscal");
-    // const notaFiscalEntity = db.firestore().collection('nota-fiscal')
-   
-
     useEffect(() => {
       const getBarCodeScannerPermissions = async () => {
         const { status } = await BarCodeScanner.requestPermissionsAsync();
