@@ -1,30 +1,27 @@
 import React from "react";
-import {
-  Text,
-  View,
-} from "react-native";
+import { Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator } from "@react-navigation/stack";
 import Login from "../login/Login";
 import Home from "../home/Home";
 import ScanScreen from "../scan/ScanScreen";
-import InvoiceItemDetail from '../invoice/InvoiceItemDetail'
+import InvoiceItemDetail from "../invoice/InvoiceItemDetail";
 
 const Stack = createNativeStackNavigator();
 
 function StackNavigator() {
-    return (      
-        <NavigationContainer>
-        <Stack.Navigator initialRouteName="Login">
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="Home" component={Home} />
-            <Stack.Screen name="Scan" component={ScanScreen} />
-            <Stack.Screen name="InvoiceItemDetail" component={InvoiceItemDetail} />
-        </Stack.Navigator>
-        </NavigationContainer>
-    )
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Scan" component={ScanScreen} />
+        <Stack.Screen name="Espelho da nota" component={InvoiceItemDetail} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 }
 
 // const Stack = createStackNavigator();
@@ -55,4 +52,4 @@ function StackNavigator() {
 //   );
 // }
 
-export default StackNavigator
+export default StackNavigator;

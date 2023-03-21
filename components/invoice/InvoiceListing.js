@@ -51,7 +51,7 @@ const ListInvoices = () => {
   };
 
   const handleItemOnPress = (item) => {
-    navigation.navigate("InvoiceItemDetail", {
+    navigation.navigate("Espelho da nota", {
       details: item.details,
     });
   };
