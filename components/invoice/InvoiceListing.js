@@ -32,10 +32,10 @@ const ListInvoices = () => {
         key: `${index}`,
         id: _data[index].id,
         title: _data[index].emitente.razao_social,
+        creation_timestamp: _data[index].data_emissao,
         // creation_timestamp: String(
         //   TimeStamp(_data[index].data_emissao.seconds)
         // ),
-        creation_timestamp: _data[index].data_emissao,
         valor_nota: `R$ ${_data[index].total}`,
       };
     }
