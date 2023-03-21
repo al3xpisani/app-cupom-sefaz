@@ -31,17 +31,20 @@ const ListInvoices = () => {
   const navigation = useNavigation();
   const { loggedUser } = useContext(zeqContext);
   const [invoices, setInvoices] = useState(null);
-  const [refreshing, setRefreshing] = useState(false)
-
+  const [refreshing, setRefreshing] = useState(false);
   useEffect(() => {
     refreshData()
+  }, []);
+
+  useEffect(() => {
+    refreshData();
     console.log(invoices);
     //ignorar essa chamada abaixo. em desenvolvimento.
     // fetchFirebaseDataLikeArrayField("nota-fiscal","emitente.razao_social","Gamin").then((item) => console.log(item))
-    fetchFirebaseExistingInvoice("nota-fiscal","chave","00000000","consumidor.cpf","196.347.878-94").then((item) => console.log('NF => ',item))
+    // fetchFirebaseExistingInvoice("nota-fiscal","chave","00000000","consumidor.cpf","196.347.878-94").then((item) => console.log('NF => ',item))
   },[]);
 
-  const refreshData = () =>{
+  const refreshData = () => {
     fetchFirebaseDataMatch(
       "nota-fiscal",
       "email",
@@ -49,14 +52,15 @@ const ListInvoices = () => {
       "data_emissao",
       false
     ).then((item) => {
-      setRefreshing(false)
+      setRefreshing(false);
       return setInvoices(item);
-  });
-  }
+    });
+  };
 
   const handleItemOnPress = (item) => {
-    navigation.navigate("InvoiceItemDetail");
-    // console.log('pressssss', item)
+    navigation.navigate("InvoiceItemDetail", {
+      details: item.details,
+    });
   };
 
   const getItem = (_data, index) => {
@@ -70,6 +74,7 @@ const ListInvoices = () => {
         //   TimeStamp(_data[index].data_emissao.seconds)
         // ),
         valor_nota: `R$ ${_data[index].total}`,
+        details: _data[index],
       };
     }
   };
@@ -80,7 +85,6 @@ const ListInvoices = () => {
 
   const renderItem = ({ item, index }) => {
     const ellipsisTitle = item?.title.length > 20 ? `${item?.title.substring(0, 20)}...` : item?.title;
-    console.log(ellipsisTitle)
     return (
       <TouchableOpacity onPress={() => handleItemOnPress(item)}>
         <View style={styles.invoiceListItem}>
