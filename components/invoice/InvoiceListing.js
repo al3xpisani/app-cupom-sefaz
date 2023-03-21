@@ -110,10 +110,10 @@ const ListInvoices = () => {
       );
     }
   };
-
+  console.log('invoices.... ', invoices)
   return (
     <SafeAreaView>
-      {invoices && (
+      {invoices && invoices.length !== 0 && (
         <VirtualizedList
           initialNumToRender={20}
           renderItem={renderItem}
@@ -125,6 +125,15 @@ const ListInvoices = () => {
           refreshing={refreshing}
           onRefresh={refreshData}
         />
+      )}
+      {invoices && (invoices.length === 0) && (
+        <View style={{display: "flex", height: "100%", alignItems: "center", justifyContent: "center" }} >
+            <Image
+            source={require("../../assets/images/noinvoice.png")}
+            style={{ width: 60, height: 60 }}
+            />
+            <Text style={{paddingTop: 20, color: "grey", fontSize: 16}} >Nenhuma nota fiscal foi adicionada</Text>
+        </View>
       )}
     </SafeAreaView>
   );

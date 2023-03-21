@@ -2,13 +2,28 @@ import React, { useState } from "react";
 import { Input } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import ListInvoices from "../invoice/InvoiceListing";
-import { StyleSheet, View, Button } from "react-native";
+import { StyleSheet, View, Button, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 const AddInvoice = ({ onHandleScan }) => {
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+    <View
+      style={{
+        flex: 1,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "#04b44c",
+        borderRadius: 10,
+        boxShadow: "0 3px 6px rgba(0, 0, 0, .2",
+      }}
+    >
+      <Image
+        source={require("../../assets/images/labelinvoicebuttonsmall.png")}
+        style={{ width: 22, height: 23 }}
+      />
       <Button
+        color={"#ffffff"}
         title="Adicionar Nota Fiscal"
         onPress={() => onHandleScan()}
       ></Button>
@@ -25,16 +40,17 @@ const SearchIcon = () => {
           backgroundColor: "#efefef",
           borderRadius: 8,
           borderBottomWidth: 0,
+          paddingLeft: 10
         }}
         placeholder="Buscar por nota fiscal"
         value={input}
         onChange={(value) => setInput(value)}
-        leftIcon={
+        rightIcon={
           <Icon
-            style={{ paddingLeft: 10 }}
+            style={{ paddingRight: 10 }}
             name="search"
             size={14}
-            color="black"
+            color="#04b44c"
           />
         }
       />
