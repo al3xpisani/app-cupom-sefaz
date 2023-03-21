@@ -17,20 +17,9 @@ function StackNavigator() {
         <Stack.Navigator initialRouteName="Login">
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Home" component={Home} />
-            <Stack.Screen name="Scan" component={ScanScreen} />
         </Stack.Navigator>
         </NavigationContainer>
     )
 }
-
-function ScanScreen() {
-    const navigation = useNavigation();
-  
-    return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <Text>Scan QRCode</Text>
-      </View>
-    );
-  }
 
 export default StackNavigator

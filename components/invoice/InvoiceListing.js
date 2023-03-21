@@ -14,13 +14,16 @@ import {
 } from "react-native";
 import { TimeStamp } from "../../utils/TimeStamp";
 import { zeqContext } from "../../App";
-import fetchFirebaseData from "../../config/fetchFirebaseData";
+import fetchFirebaseDataMatch, { fetchFirebaseDataLikeArrayField } from "../../config/fetchFirebaseData";
 
 const ListInvoices = () => {
-  const {loggedUser} = useContext(zeqContext);
+  const { loggedUser } = useContext(zeqContext);
   const [invoices, setInvoices] = useState(null);
   useEffect(() => {
-    fetchFirebaseData("nota-fiscal","email",loggedUser).then((item) => setInvoices(item));
+    fetchFirebaseDataMatch("nota-fiscal", "email", loggedUser,"data_emissao",false).then((item) =>
+      setInvoices(item)
+    );
+    // fetchFirebaseDataLikeArrayField("nota-fiscal","emitente.razao_social",{emitente: {razao_social: 'Cas'}}).then((item) => console.log(item))
   }, []);
 
   const getItem = (_data, index) => {
@@ -28,10 +31,11 @@ const ListInvoices = () => {
       return {
         key: `${index}`,
         id: _data[index].id,
-        title: _data[index].emitente[0].razao_social,
-        creation_timestamp: String(
-          TimeStamp(_data[index].data_emissao.seconds)
-        ),
+        title: _data[index].emitente.razao_social,
+        // creation_timestamp: String(
+        //   TimeStamp(_data[index].data_emissao.seconds)
+        // ),
+        creation_timestamp: _data[index].data_emissao,
         valor_nota: `R$ ${_data[index].total}`,
       };
     }
@@ -39,16 +43,22 @@ const ListInvoices = () => {
   const keyExtractor = (item, index) => {
     return `${index}`;
   };
-  const getItemCount = (_data) => getItem?.length;
+  const getItemCount = (_data) => invoices?.length;
 
   const renderItem = ({ item, index }) => {
     return (
       <View style={styles.invoiceListItem}>
-        <Text style={{ fontSize: 16, fontWeight: "bold" }}>{item?.title}</Text>
-        <Text style={{ fontSize: 14 }}>{item?.creation_timestamp}</Text>
-        <Text style={{ fontSize: 14, color: "grey", paddingTop: 10 }}>
-          {item?.valor_nota}
-        </Text>
+        <View style={{flexDirection:"column"}}>
+          <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+            {item?.title}
+          </Text>
+          <Text style={{ fontSize: 14 }}>{item?.creation_timestamp}</Text>
+        </View>
+        <View>
+          <Text style={{ fontSize: 14, color: "grey" }}>
+            {item?.valor_nota}
+          </Text>
+        </View>
       </View>
     );
   };
@@ -132,9 +142,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   invoiceListItem: {
-    height: 60,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    height: 50,
     marginVertical: 8,
-    marginHorizontal: 16,
+    marginHorizontal: 16
   },
 });
 
