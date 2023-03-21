@@ -31,16 +31,26 @@ const ListInvoices = () => {
   const navigation = useNavigation();
   const { loggedUser } = useContext(zeqContext);
   const [invoices, setInvoices] = useState(null);
-  const [refreshing, setRefreshing] = useState(false)
+  const [refreshing, setRefreshing] = useState(false);
+  useEffect(() => {
+    fetchFirebaseDataMatch(
+      "nota-fiscal",
+      "email",
+      loggedUser,
+      "data_emissao",
+      false
+    ).then((item) => setInvoices(item));
+    console.log(Math.random(1));
+  }, []);
 
   useEffect(() => {
-    refreshData()
+    refreshData();
     console.log(invoices);
     //ignorar essa chamada abaixo. em desenvolvimento.
     // fetchFirebaseDataLikeArrayField("nota-fiscal","emitente.razao_social","Gamin").then((item) => console.log(item))
-  },[]);
+  }, []);
 
-  const refreshData = () =>{
+  const refreshData = () => {
     fetchFirebaseDataMatch(
       "nota-fiscal",
       "email",
@@ -48,15 +58,19 @@ const ListInvoices = () => {
       "data_emissao",
       false
     ).then((item) => {
-      setRefreshing(false)
+      setRefreshing(false);
       return setInvoices(item);
-  });
-  }
+    });
+  };
 
   const handleItemOnPress = (item) => {
-    navigation.navigate("InvoiceItemDetail");
-    // console.log('pressssss', item)
+    navigation.navigate("InvoiceItemDetail", {
+      details: item.details,
+    });
+    // console.log("pressssss", item);
   };
+
+  // console.log("->", invoices ? invoices[2] : "calma");
 
   const getItem = (_data, index) => {
     if (index in _data) {
@@ -69,6 +83,7 @@ const ListInvoices = () => {
         //   TimeStamp(_data[index].data_emissao.seconds)
         // ),
         valor_nota: `R$ ${_data[index].total}`,
+        details: _data[index],
       };
     }
   };
