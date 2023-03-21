@@ -22,7 +22,7 @@ const fetchFirebaseDataMatch = async (
   const db = getFirestore(app);
   const firebaseQuery = query(
     collection(db, collectionName),
-    where(searchFieldName, "==", 'jimenslima@gmail.com'),
+    where(searchFieldName, "==", searchValue),
     orderBy(orderByField, isAscSorted ? "asc" : "desc")
   );
 
