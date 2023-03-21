@@ -8,6 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "../login/Login";
 import Home from "../home/Home";
+import ScanScreen from "../scan/ScanScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -22,15 +23,5 @@ function StackNavigator() {
         </NavigationContainer>
     )
 }
-
-function ScanScreen() {
-    const navigation = useNavigation();
-  
-    return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <Text>Scan QRCode</Text>
-      </View>
-    );
-  }
 
 export default StackNavigator

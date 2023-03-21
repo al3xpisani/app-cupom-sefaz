@@ -28,10 +28,11 @@ const ListInvoices = () => {
       return {
         key: `${index}`,
         id: _data[index].id,
-        title: _data[index].emitente[0].razao_social,
-        creation_timestamp: String(
-          TimeStamp(_data[index].data_emissao.seconds)
-        ),
+        title: _data[index].emitente.razao_social,
+        creation_timestamp: _data[index].data_emissao,
+        // creation_timestamp: String(
+        //   TimeStamp(_data[index].data_emissao.seconds)
+        // ),
         valor_nota: `R$ ${_data[index].total}`,
       };
     }
