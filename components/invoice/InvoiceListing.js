@@ -17,7 +17,7 @@ import { TimeStamp } from "../../utils/TimeStamp";
 import { zeqContext } from "../../context/context";
 import { useFocusEffect } from "@react-navigation/native";
 import fetchFirebaseDataMatch, {
-  fetchFirebaseDataLikeArrayField,
+    fetchFirebaseExistingInvoice,
 } from "../../config/fetchFirebaseData";
 import {
   app,
@@ -38,6 +38,7 @@ const ListInvoices = () => {
     console.log(invoices);
     //ignorar essa chamada abaixo. em desenvolvimento.
     // fetchFirebaseDataLikeArrayField("nota-fiscal","emitente.razao_social","Gamin").then((item) => console.log(item))
+    fetchFirebaseExistingInvoice("nota-fiscal","chave","00000000","consumidor.cpf","196.347.878-94").then((item) => console.log('NF => ',item))
   },[]);
 
   const refreshData = () =>{
@@ -78,12 +79,14 @@ const ListInvoices = () => {
   const getItemCount = (_data) => invoices?.length;
 
   const renderItem = ({ item, index }) => {
+    const ellipsisTitle = item?.title.length > 20 ? `${item?.title.substring(0, 20)}...` : item?.title;
+    console.log(ellipsisTitle)
     return (
       <TouchableOpacity onPress={() => handleItemOnPress(item)}>
         <View style={styles.invoiceListItem}>
           <View style={{ flexDirection: "column" }}>
             <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-              {item?.title}
+              {ellipsisTitle}
             </Text>
             <Text style={{ fontSize: 14 }}>{item?.creation_timestamp}</Text>
           </View>
@@ -115,7 +118,7 @@ const ListInvoices = () => {
     <SafeAreaView>
       {invoices && (
         <VirtualizedList
-          initialNumToRender={4}
+          initialNumToRender={20}
           renderItem={renderItem}
           keyExtractor={keyExtractor}
           getItemCount={getItemCount}

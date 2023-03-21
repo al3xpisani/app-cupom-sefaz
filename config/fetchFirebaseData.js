@@ -34,6 +34,27 @@ const fetchFirebaseDataMatch = async (
   return invoices;
 };
 
+export const fetchFirebaseExistingInvoice = async (
+    collectionName,
+    searchFieldName,
+    searchValue,
+    searchFieldName1,
+    searchValue1
+  ) => {
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const firebaseQuery = query(
+      collection(db, collectionName),
+      where(searchFieldName, "==", searchValue).where(searchFieldName1,"==",searchValue1)
+    );
+  
+    let invoices = [];
+    const querySnapshot = await getDocs(firebaseQuery);
+    querySnapshot.forEach((doc) => {
+      invoices.push(doc.data());
+    });
+    return invoices;
+  };
 // export const fetchFirebaseDataLikeArrayField = async (
 //     collectionName,
 //     orderByField,
