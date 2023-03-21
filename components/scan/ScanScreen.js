@@ -4,7 +4,7 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import { useNavigation } from '@react-navigation/native';
 import NfeAPI from '../../services/NFeAPI';
 import { zeqContext } from "../../context/context";
-import {app, db, getFirestore, collection, addDoc} from "../../config/firebase-config2";
+import {app, db, getFirestore, collection, addDoc} from "../../config/firebase-config";
 
 const MAX_ATTEMPTS = 10;
 

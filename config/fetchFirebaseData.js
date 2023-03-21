@@ -1,15 +1,10 @@
-import { initializeApp } from "firebase/app";
-import { firebaseConfig } from "./firebase-config";
 import {
-  getFirestore,
-  collection,
   getDocs,
   query,
   where,
   orderBy,
-  startAt
 } from "firebase/firestore";
-import { getDatabase, goOffline } from "firebase/database";
+import {app, db, getFirestore, collection,addDoc} from './firebase-config'
 
 const fetchFirebaseDataMatch = async (
   collectionName,
@@ -18,8 +13,6 @@ const fetchFirebaseDataMatch = async (
   orderByField,
   isAscSorted
 ) => {
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
   const firebaseQuery = query(
     collection(db, collectionName),
     where(searchFieldName, "==", searchValue),
@@ -41,11 +34,9 @@ export const fetchFirebaseExistingInvoice = async (
     searchFieldName1,
     searchValue1
   ) => {
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
     const firebaseQuery = query(
       collection(db, collectionName),
-      where(searchFieldName, "==", searchValue).where(searchFieldName1,"==",searchValue1)
+      where({"chave":searchValue, "email":searchValue1})
     );
   
     let invoices = [];
@@ -55,7 +46,8 @@ export const fetchFirebaseExistingInvoice = async (
     });
     return invoices;
   };
-// export const fetchFirebaseDataLikeArrayField = async (
+
+//   export const fetchFirebaseDataLikeArrayField = async (
 //     collectionName,
 //     orderByField,
 //     searchValueObject,

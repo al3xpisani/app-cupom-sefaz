@@ -19,13 +19,6 @@ import { useFocusEffect } from "@react-navigation/native";
 import fetchFirebaseDataMatch, {
     fetchFirebaseExistingInvoice,
 } from "../../config/fetchFirebaseData";
-import {
-  app,
-  db,
-  getFirestore,
-  collection,
-  addDoc,
-} from "../../config/firebase-config2";
 
 const ListInvoices = () => {
   const navigation = useNavigation();
@@ -41,7 +34,7 @@ const ListInvoices = () => {
     console.log(invoices);
     //ignorar essa chamada abaixo. em desenvolvimento.
     // fetchFirebaseDataLikeArrayField("nota-fiscal","emitente.razao_social","Gamin").then((item) => console.log(item))
-    // fetchFirebaseExistingInvoice("nota-fiscal","chave","00000000","consumidor.cpf","196.347.878-94").then((item) => console.log('NF => ',item))
+    // fetchFirebaseExistingInvoice("nota-fiscal","chave","00000000","email","12312860406").then((item) => console.log('NF => ',item))
   },[]);
 
   const refreshData = () => {
