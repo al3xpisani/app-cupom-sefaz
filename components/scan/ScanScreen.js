@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, Button } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { useNavigation } from '@react-navigation/native';
 import NfeAPI from '../../services/NFeAPI';
-import { zeqContext } from "../../App";
+import { zeqContext } from '../../context/context';
 import {app, db, getFirestore, collection, addDoc} from "../../config/firebase-config2";
 
 
@@ -29,7 +29,7 @@ export default function ScanScreen() {
             // alert("Salvando no Firebase "+ JSON.stringify(nfe));
             const docRef = await addDoc(collection(db, "nota-fiscal"), nfe);
             console.log("Document written with ID: ", docRef.id);
-            navigation.navigate("Home");
+            navigation.navigate("Home",{refreshData: true});
         } catch (e) {
             console.error("Error adding document: ", e);
         }

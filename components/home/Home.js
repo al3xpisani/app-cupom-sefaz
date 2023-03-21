@@ -47,6 +47,7 @@ function Home() {
   const handleScan = () => {
     navigation.navigate("Scan");
   };
+
   return (
     <View
       style={[

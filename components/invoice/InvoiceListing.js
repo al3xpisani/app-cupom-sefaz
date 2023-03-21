@@ -14,28 +14,49 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { TimeStamp } from "../../utils/TimeStamp";
-import { zeqContext } from "../../App";
-import fetchFirebaseDataMatch, { fetchFirebaseDataLikeArrayField } from "../../config/fetchFirebaseData";
+import { zeqContext } from "../../context/context";
+import { useFocusEffect } from "@react-navigation/native";
+import fetchFirebaseDataMatch, {
+  fetchFirebaseDataLikeArrayField,
+} from "../../config/fetchFirebaseData";
+import {
+  app,
+  db,
+  getFirestore,
+  collection,
+  addDoc,
+} from "../../config/firebase-config2";
 
 const ListInvoices = () => {
-    const navigation = useNavigation();
+  const navigation = useNavigation();
   const { loggedUser } = useContext(zeqContext);
   const [invoices, setInvoices] = useState(null);
-  useEffect(() => {
-    fetchFirebaseDataMatch("nota-fiscal", "email", loggedUser,"data_emissao",false).then((item) =>
-      setInvoices(item)
-    );
-    console.log(Math.random(1))
+  const [refreshing, setRefreshing] = useState(false)
 
+  useEffect(() => {
+    refreshData()
+    console.log(invoices);
     //ignorar essa chamada abaixo. em desenvolvimento.
     // fetchFirebaseDataLikeArrayField("nota-fiscal","emitente.razao_social","Gamin").then((item) => console.log(item))
   },[]);
 
+  const refreshData = () =>{
+    fetchFirebaseDataMatch(
+      "nota-fiscal",
+      "email",
+      loggedUser,
+      "data_emissao",
+      false
+    ).then((item) => {
+      setRefreshing(false)
+      return setInvoices(item);
+  });
+  }
+
   const handleItemOnPress = (item) => {
     navigation.navigate("InvoiceItemDetail");
     // console.log('pressssss', item)
-
-  }
+  };
 
   const getItem = (_data, index) => {
     if (index in _data) {
@@ -58,21 +79,21 @@ const ListInvoices = () => {
 
   const renderItem = ({ item, index }) => {
     return (
-      <View style={styles.invoiceListItem}>
-        <TouchableOpacity onPress={() => handleItemOnPress(item) }>
-            <View style={{flexDirection:"column"}}>
+      <TouchableOpacity onPress={() => handleItemOnPress(item)}>
+        <View style={styles.invoiceListItem}>
+          <View style={{ flexDirection: "column" }}>
             <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-                {item?.title}
+              {item?.title}
             </Text>
             <Text style={{ fontSize: 14 }}>{item?.creation_timestamp}</Text>
-            </View>
-            <View>
+          </View>
+          <View>
             <Text style={{ fontSize: 14, color: "grey" }}>
-                {item?.valor_nota}
+              {item?.valor_nota}
             </Text>
-            </View>
-        </TouchableOpacity>
-      </View>
+          </View>
+        </View>
+      </TouchableOpacity>
     );
   };
 
@@ -101,6 +122,8 @@ const ListInvoices = () => {
           getItem={getItem}
           data={invoices}
           ItemSeparatorComponent={ItemSeparator}
+          refreshing={refreshing}
+          onRefresh={refreshData}
         />
       )}
     </SafeAreaView>
@@ -160,7 +183,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: 50,
     marginVertical: 8,
-    marginHorizontal: 16
+    marginHorizontal: 16,
   },
 });
 

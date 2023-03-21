@@ -9,7 +9,7 @@ import {
   orderBy,
   startAt
 } from "firebase/firestore";
-import { getDatabase, ref, orderByChild } from "firebase/database";
+import { getDatabase, goOffline } from "firebase/database";
 
 const fetchFirebaseDataMatch = async (
   collectionName,

@@ -1,7 +1,6 @@
 import React, { useState, createContext } from "react";
 import StackNavigator from "./components/navigation/StackNavigator";
-
-export const zeqContext = createContext({loggedUser: '',setLoggedUser: () => {}});
+import { zeqContext } from "./context/context";
 
 export default function App() {
   const [loggedUser, setLoggedUser] = useState('');

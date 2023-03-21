@@ -19,8 +19,8 @@ import {
 import { BlurView } from "expo-blur";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../../config/firebase-config";
-import { useNavigation } from "@react-navigation/native";
-import { zeqContext } from "../../App";
+import { useNavigation, StackActions } from "@react-navigation/native";
+import { zeqContext } from "../../context/context";
 
 const cesarLogo =
   "https://www.cesar.org.br/image/layout_set_logo?img_id=1086110&t=1673865791645";
@@ -29,6 +29,7 @@ function Login() {
     const [email,setEmail] = useState("");
     const [password, setPassword] = useState("");
     const {setLoggedUser} = useContext(zeqContext);
+    const [navigateToHome, setNavigateToHome] = useState(false)
 
     const navigation = useNavigation();
 
