@@ -114,17 +114,6 @@ function Login() {
       > */}
       {/* <BlurView intensity={100}> */}
       <View style={styles.login}>
-        <Text
-          style={{
-            fontSize: 18,
-            fontWeight: 800,
-            color: "#540d6e",
-            // marginBottom,
-            textAlign: "center",
-          }}
-        >
-          Login Account
-        </Text>
         <View>
           {/* <Text style={{ fontSize: 17, fontWeight: "400" }}>Email</Text> */}
           <TextInput
@@ -259,7 +248,7 @@ const styles = StyleSheet.create({
     height: "100%",
     minHeight: 700,
     gap: 20,
-    paddingTop: 20,
+    paddingTop: 60,
   },
   containerInvoiceListing: {
     padding: 10,

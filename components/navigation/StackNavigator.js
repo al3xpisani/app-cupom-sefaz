@@ -15,26 +15,36 @@ function StackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="Home"
           component={Home}
-          options={navigationOptions("Minhas notas","#ffffff","#540d6e") }
-          />
-        <Stack.Screen name="Scan" component={ScanScreen} 
-          options={navigationOptions("Salvar nota","#ffffff","#540d6e") } />
-        <Stack.Screen name="Espelho da nota" component={InvoiceItemDetail} 
-          options={navigationOptions("Espelho nota","#ffffff","#540d6e") } />
+          options={navigationOptions("Minhas notas", "#ffffff", "#540d6e")}
+        />
+        <Stack.Screen
+          name="Scan"
+          component={ScanScreen}
+          options={navigationOptions("Salvar nota", "#ffffff", "#540d6e")}
+        />
+        <Stack.Screen
+          name="Espelho da nota"
+          component={InvoiceItemDetail}
+          options={navigationOptions("Espelho nota", "#ffffff", "#540d6e")}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
 
-const navigationOptions = (title,headerTintcolor,backColor) => ({
+const navigationOptions = (title, headerTintcolor, backColor) => ({
   title: title,
   headerTintColor: headerTintcolor,
   headerStyle: {
-    backgroundColor: backColor
+    backgroundColor: backColor,
   },
 });
 
