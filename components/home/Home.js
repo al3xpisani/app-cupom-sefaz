@@ -78,7 +78,7 @@ function Home() {
       >
         <SearchIcon />
       </View>
-      <View style={{ flex: 8, backgroundColor: "white" }}>
+      <View style={{ flex: 8, backgroundColor: "white"}}>
         <ListInvoices />
       </View>
       <View style={{ flex: 1, justifyContent: "center" }}>

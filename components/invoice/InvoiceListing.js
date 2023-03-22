@@ -15,9 +15,8 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { TimeStamp } from "../../utils/TimeStamp";
 import { zeqContext } from "../../context/context";
-import { useFocusEffect } from "@react-navigation/native";
 import fetchFirebaseDataMatch, {
-    fetchFirebaseExistingInvoice,
+  fetchFirebaseExistingInvoice,
 } from "../../config/fetchFirebaseData";
 
 const ListInvoices = () => {
@@ -26,16 +25,12 @@ const ListInvoices = () => {
   const [invoices, setInvoices] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
   useEffect(() => {
-    refreshData()
+    refreshData();
   }, []);
 
   useEffect(() => {
     refreshData();
-    console.log(invoices);
-    //ignorar essa chamada abaixo. em desenvolvimento.
-    // fetchFirebaseDataLikeArrayField("nota-fiscal","emitente.razao_social","Gamin").then((item) => console.log(item))
-    // fetchFirebaseExistingInvoice("nota-fiscal","chave","00000000","email","12312860406").then((item) => console.log('NF => ',item))
-  },[]);
+  }, []);
 
   const refreshData = () => {
     fetchFirebaseDataMatch(
@@ -77,7 +72,10 @@ const ListInvoices = () => {
   const getItemCount = (_data) => invoices?.length;
 
   const renderItem = ({ item, index }) => {
-    const ellipsisTitle = item?.title.length > 20 ? `${item?.title.substring(0, 20)}...` : item?.title;
+    const ellipsisTitle =
+      item?.title.length > 20
+        ? `${item?.title.substring(0, 20)}...`
+        : item?.title;
     return (
       <TouchableOpacity onPress={() => handleItemOnPress(item)}>
         <View style={styles.invoiceListItem}>
@@ -110,11 +108,11 @@ const ListInvoices = () => {
       );
     }
   };
-  console.log('invoices.... ', invoices)
   return (
     <SafeAreaView>
       {invoices && invoices.length !== 0 && (
         <VirtualizedList
+          style={{ height: "100%" }}
           initialNumToRender={20}
           renderItem={renderItem}
           keyExtractor={keyExtractor}
@@ -126,13 +124,22 @@ const ListInvoices = () => {
           onRefresh={refreshData}
         />
       )}
-      {invoices && (invoices.length === 0) && (
-        <View style={{display: "flex", height: "100%", alignItems: "center", justifyContent: "center" }} >
-            <Image
+      {invoices && invoices.length === 0 && (
+        <View
+          style={{
+            display: "flex",
+            height: "100%",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Image
             source={require("../../assets/images/noinvoice.png")}
             style={{ width: 60, height: 60 }}
-            />
-            <Text style={{paddingTop: 20, color: "grey", fontSize: 16}} >Nenhuma nota fiscal foi adicionada</Text>
+          />
+          <Text style={{ paddingTop: 20, color: "grey", fontSize: 16 }}>
+            Nenhuma nota fiscal foi adicionada
+          </Text>
         </View>
       )}
     </SafeAreaView>
