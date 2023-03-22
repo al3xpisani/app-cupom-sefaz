@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Text, View, StyleSheet, Button } from "react-native";
+import { Text, View, StyleSheet, Button, Alert } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useNavigation } from "@react-navigation/native";
 import NfeAPI from "../../services/NFeAPI";
 import { zeqContext } from "../../context/context";
-import { RootSiblingParent } from 'react-native-root-siblings';
-import Toast from 'react-native-root-toast'
+import { RootSiblingParent } from "react-native-root-siblings";
 import {
   app,
   db,
@@ -13,7 +12,7 @@ import {
   collection,
   addDoc,
 } from "../../config/firebase-config";
-import { fetchFirebaseExistingInvoice } from "../../config/fetchFirebaseData";
+import fetchFirebaseDataMatch from "../../config/fetchFirebaseData";
 
 const MAX_ATTEMPTS = 10;
 
@@ -100,22 +99,21 @@ export default function ScanScreen() {
         nfe.emitente = response.emitente;
         nfe.produtos = response.produtos;
         nfe.status = response.status;
-
-        fetchFirebaseExistingInvoice(
+        fetchFirebaseDataMatch(
           "nota-fiscal",
           "chave",
-          response.chave,
-          "email",
-          response.email
+          nfe.chave,
+          "data_emissao",
+          false
         ).then((item) => {
-          if(item) {
-            Toast.show('Essa Nota Fiscal já existe.', Toast.durations.SHORT);
-            return
-          }else {
+          if (item.length !== 0) {
+            Alert.alert("Nota Fiscal já existente", "QrCode cancelado");
+            setScanned(true);
+            navigation.navigate("Home");
+          } else {
             addNfe(nfe);
           }
         });
-
       })
       .catch((error) => {
         alert(error);
@@ -123,24 +121,24 @@ export default function ScanScreen() {
   };
 
   if (hasPermission === null) {
-    return <Text>Solicitando acesso à Camera</Text>;
+    return <Text style={{display: "flex", alignItems: "center", height: "100%", justifyContent: "center"}} >Solicitando acesso à Camera</Text>;
   }
 
   if (hasPermission === false) {
-    return <Text>Sem acesso à Camera</Text>;
+    return <Text style={{display: "flex", alignItems: "center", height: "100%", justifyContent: "center"}} >Sem acesso à Camera</Text>;
   }
 
   return (
     <RootSiblingParent>
-    <View style={styles.container}>
-      <BarCodeScanner
-        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-        style={StyleSheet.absoluteFillObject}
-      />
-      {scanned && (
-        <Button title={"Ler QRCode"} onPress={() => setScanned(false)} />
-      )}
-    </View>
+      <View style={styles.container}>
+        <BarCodeScanner
+          onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+          style={StyleSheet.absoluteFillObject}
+        />
+        {scanned && (
+          <Button title={"Ler QRCode"} onPress={() => setScanned(false)} />
+        )}
+      </View>
     </RootSiblingParent>
   );
 }

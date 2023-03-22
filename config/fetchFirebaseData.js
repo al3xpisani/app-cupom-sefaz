@@ -33,6 +33,7 @@ export const fetchFirebaseExistingInvoice = async (
   let firebaseQuery = null;
   let querySnapshot = null;
   try {
+      console.log('chave e email ', searchFieldName, searchValue1)
     firebaseQuery = query(
       collection(db, collectionName),
       where(searchFieldName, "==", searchValue)
@@ -43,9 +44,11 @@ export const fetchFirebaseExistingInvoice = async (
         collection(db, collectionName),
         where(searchFieldName1, "==", searchValue1)
       );
-      querySnapshot = await getDocs(firebaseQuery);
+      if (!querySnapshot.empty) {
+          querySnapshot = await getDocs(firebaseQuery);
+      }
     }
-
+    console.log('query snaph ', querySnapshot.empty)
     querySnapshot.forEach((doc) => {
       invoices.push(doc.data());
     });

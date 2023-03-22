@@ -2,31 +2,31 @@ import React, { useState } from "react";
 import { Input } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import ListInvoices from "../invoice/InvoiceListing";
-import { StyleSheet, View, Button, Image } from "react-native";
+import { StyleSheet, View, Button, Image, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 const AddInvoice = ({ onHandleScan }) => {
   return (
     <View
-      style={{
-        flex: 1,
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#04b44c",
-        borderRadius: 10,
-        boxShadow: "0 3px 6px rgba(0, 0, 0, .2",
-      }}
+    style={{
+      flex: 1,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: "#04b44c",
+      borderRadius: 10,
+      boxShadow: "0 3px 6px rgba(0, 0, 0, .2",
+    }}
     >
       <Image
         source={require("../../assets/images/labelinvoicebuttonsmall.png")}
         style={{ width: 22, height: 23 }}
-      />
+        />
       <Button
         color={"#ffffff"}
         title="Adicionar Nota Fiscal"
         onPress={() => onHandleScan()}
-      ></Button>
+        ></Button>
     </View>
   );
 };
@@ -47,13 +47,13 @@ const SearchIcon = () => {
         onChange={(value) => setInput(value)}
         rightIcon={
           <Icon
-            style={{ paddingRight: 10 }}
-            name="search"
-            size={14}
-            color="#04b44c"
+          style={{ paddingRight: 10 }}
+          name="search"
+          size={14}
+          color="#04b44c"
           />
         }
-      />
+        />
     </View>
   );
 };
@@ -66,16 +66,16 @@ function Home() {
 
   return (
     <View
-      style={[
+    style={[
         styles.containerInvoiceListing,
         {
           flexDirection: "column",
         },
       ]}
-    >
+      >
       <View
         style={{ flex: 1, justifyContent: "center", backgroundColor: "white" }}
-      >
+        >
         <SearchIcon />
       </View>
       <View style={{ flex: 8, backgroundColor: "white"}}>
