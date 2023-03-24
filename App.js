@@ -1,20 +1,18 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState, createContext } from "react";
+import StackNavigator from "./components/navigation/StackNavigator";
+import { zeqContext } from "./context/context";
+import { Provider as PaperProvider } from "react-native-paper";
+import { RootSiblingParent } from "react-native-root-siblings";
 
 export default function App() {
+  const [loggedUser, setLoggedUser] = useState("");
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <zeqContext.Provider value={{ loggedUser, setLoggedUser }}>
+      <PaperProvider>
+        <RootSiblingParent>
+          <StackNavigator />
+        </RootSiblingParent>
+      </PaperProvider>
+    </zeqContext.Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
