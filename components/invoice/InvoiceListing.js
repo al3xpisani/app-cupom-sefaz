@@ -16,6 +16,7 @@ import { zeqContext } from "../../context/context";
 import fetchFirebaseDataMatch, {
   fetchFirebaseLikeAt,
 } from "../../config/fetchFirebaseData";
+import useViewAnimation from "../hooks/useViewAnimation";
 
 function ListInvoices({ searchText }) {
   const characterLimit = 3;
@@ -76,6 +77,7 @@ function ListInvoices({ searchText }) {
       setRefreshing(false);
       setInvoices(item);
       setBackSpaceChar(0);
+      useViewAnimation()
     });
   };
 
@@ -188,6 +190,12 @@ const styles = StyleSheet.create({
     height: 50,
     marginVertical: 8,
     marginHorizontal: 16,
+  },
+  moveRight: {
+    alignSelf: 'flex-end',
+  },
+  left: {
+    alignSelf: 'flex-start',
   },
 });
 
