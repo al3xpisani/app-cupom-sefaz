@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, createContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   Alert,
   Image,
@@ -12,38 +12,73 @@ import {
   SafeAreaView,
   VirtualizedList,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { TimeStamp } from "../../utils/TimeStamp";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
+import { TimeStampStringFormat } from "../../utils/TimeStamp";
+import { ElipsizeText } from "../../utils/ElipsizeText";
 import { zeqContext } from "../../context/context";
 import fetchFirebaseDataMatch, {
-  fetchFirebaseExistingInvoice,
+  fetchFirebaseLikeAt,
 } from "../../config/fetchFirebaseData";
 
-const ListInvoices = () => {
+function ListInvoices({ searchText }) {
+  const characterLimit = 3
+  const isFocused = useIsFocused();
   const navigation = useNavigation();
   const { loggedUser } = useContext(zeqContext);
   const [invoices, setInvoices] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
-  useEffect(() => {
-    refreshData();
-  }, []);
+  const [backSpaceChar, setBackSpaceChar] = useState(0)
 
   useEffect(() => {
-    refreshData();
-  }, []);
+    if (isFocused) {
+      refreshData();
+    }
+  }, [isFocused, searchText]);
 
   const refreshData = () => {
+    if (searchText.length >= characterLimit) {
+      if(ignoreIfBackspaceKey()) return
+      fireBaseSearchByTyping()
+    } else if (searchText.length === 0) {
+      firebaseLoadAtOnce()
+    }
+  };
+
+  const ignoreIfBackspaceKey = () => {
+    if(backSpaceChar >= searchText.length) {
+      setBackSpaceChar(searchText.length)
+      return true
+    }
+  }
+  const fireBaseSearchByTyping = () => {
+    console.log('backspace and data typing ', backSpaceChar, searchText, searchText.length)
+    fetchFirebaseLikeAt(
+      "nota-fiscal",
+      "email",
+      loggedUser,
+      "emitente.razao_social",
+      String(searchText).toUpperCase()
+      ).then((item) => {
+        setRefreshing(false);
+        setInvoices(item);
+        setBackSpaceChar(searchText.length)
+    });
+  }
+
+  const firebaseLoadAtOnce = () => {
+    console.log("refreshed data atOnce");
     fetchFirebaseDataMatch(
       "nota-fiscal",
       "email",
       loggedUser,
       "data_emissao",
       false
-    ).then((item) => {
-      setRefreshing(false);
-      return setInvoices(item);
+      ).then((item) => {
+        setRefreshing(false);
+        setInvoices(item);
+        setBackSpaceChar(0)
     });
-  };
+  }
 
   const handleItemOnPress = (item) => {
     navigation.navigate("Espelho da nota", {
@@ -57,10 +92,9 @@ const ListInvoices = () => {
         key: `${index}`,
         id: _data[index].id,
         title: _data[index].emitente.razao_social,
-        creation_timestamp: _data[index].data_emissao,
-        // creation_timestamp: String(
-        //   TimeStamp(_data[index].data_emissao.seconds)
-        // ),
+        creation_timestamp: String(
+          TimeStampStringFormat(_data[index].data_emissao)
+        ),
         valor_nota: `R$ ${_data[index].total}`,
         details: _data[index],
       };
@@ -72,10 +106,7 @@ const ListInvoices = () => {
   const getItemCount = (_data) => invoices?.length;
 
   const renderItem = ({ item, index }) => {
-    const ellipsisTitle =
-      item?.title.length > 20
-        ? `${item?.title.substring(0, 20)}...`
-        : item?.title;
+        const ellipsisTitle = ElipsizeText(item?.title, 20)
     return (
       <TouchableOpacity onPress={() => handleItemOnPress(item)}>
         <View style={styles.invoiceListItem}>
@@ -111,7 +142,7 @@ const ListInvoices = () => {
   return (
     <SafeAreaView>
       {invoices && invoices.length !== 0 && (
-          <VirtualizedList
+        <VirtualizedList
           style={{ height: "100%" }}
           initialNumToRender={20}
           renderItem={renderItem}
@@ -122,10 +153,9 @@ const ListInvoices = () => {
           ItemSeparatorComponent={ItemSeparator}
           refreshing={refreshing}
           onRefresh={refreshData}
-          />
+        />
       )}
       {invoices && invoices.length === 0 && (
-        <TouchableOpacity onPress={() => refreshData()}>
           <View
             style={{
               display: "flex",
@@ -139,14 +169,13 @@ const ListInvoices = () => {
               style={{ width: 60, height: 60 }}
             />
             <Text style={{ paddingTop: 20, color: "grey", fontSize: 16 }}>
-              Nenhuma nota fiscal foi carregada.{"\n"}Clique aqui para recarregar a tela.
+              Nota fiscal não encontrada
             </Text>
           </View>
-        </TouchableOpacity>
       )}
     </SafeAreaView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {

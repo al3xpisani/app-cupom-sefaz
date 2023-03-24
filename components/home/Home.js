@@ -1,91 +1,76 @@
-import React, { useState } from "react";
-import { Input } from "react-native-elements";
-import Icon from "react-native-vector-icons/FontAwesome";
+import React, { useState, useEffect } from "react";
 import ListInvoices from "../invoice/InvoiceListing";
 import { StyleSheet, View, Button, Image, Text } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-
-const AddInvoice = ({ onHandleScan }) => {
-  return (
-    <View
-    style={{
-      flex: 1,
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "center",
-      backgroundColor: "#04b44c",
-      borderRadius: 10,
-      boxShadow: "0 3px 6px rgba(0, 0, 0, .2",
-    }}
-    >
-      <Image
-        source={require("../../assets/images/labelinvoicebuttonsmall.png")}
-        style={{ width: 22, height: 23 }}
-        />
-      <Button
-        color={"#ffffff"}
-        title="Adicionar Nota Fiscal"
-        onPress={() => onHandleScan()}
-        ></Button>
-    </View>
-  );
-};
-
-const SearchIcon = () => {
-  const [input, setInput] = useState("");
-  return (
-    <View style={{ flex: 1, justifyContent: "center", paddingTop: 20 }}>
-      <Input
-        inputContainerStyle={{
-          backgroundColor: "#efefef",
-          borderRadius: 8,
-          borderBottomWidth: 0,
-          paddingLeft: 10
-        }}
-        placeholder="Buscar por nota fiscal"
-        value={input}
-        onChange={(value) => setInput(value)}
-        rightIcon={
-          <Icon
-          style={{ paddingRight: 10 }}
-          name="search"
-          size={14}
-          color="#04b44c"
-          />
-        }
-        />
-    </View>
-  );
-};
+import { useNavigation, useIsFocused } from "@react-navigation/native";
+import SearchInvoice from "../invoice/SearchInvoice";
 
 function Home() {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
+  const [globalSearch, setGlobalSearch] = useState('')
+
+  useEffect(() => {
+    if (isFocused) {
+    }
+  }, [isFocused]);
+  
+  const handleSearchInvoice = (value) => {
+    setGlobalSearch(value)
+  }
+
   const handleScan = () => {
     navigation.navigate("Scan");
   };
 
-  return (
+  const AddInvoice = ({ onHandleScan }) => {
+    return (
+      <View
+        style={{
+          flex: 1,
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: "#04b44c",
+          borderRadius: 10,
+          boxShadow: "0 3px 6px rgba(0, 0, 0, .2",
+        }}
+      >
+        <Image
+          source={require("../../assets/images/labelinvoicebuttonsmall.png")}
+          style={{ width: 22, height: 23 }}
+        />
+        <Button
+          color={"#ffffff"}
+          title="Adicionar Nota Fiscal"
+          onPress={() => onHandleScan()}
+        ></Button>
+      </View>
+    );
+  };
+
+    return (
     <View
-    style={[
+      style={[
         styles.containerInvoiceListing,
         {
           flexDirection: "column",
         },
       ]}
-      >
+    >
       <View
         style={{ flex: 1, justifyContent: "center", backgroundColor: "white" }}
-        >
-        <SearchIcon />
+      >
+        <SearchInvoice handleSearchInvoice={handleSearchInvoice} />
       </View>
-      <View style={{ flex: 8, backgroundColor: "white"}}>
-        <ListInvoices />
+      <View style={{ flex: 8, backgroundColor: "white" }}>
+        <ListInvoices searchText={globalSearch} />
       </View>
       <View style={{ flex: 1, justifyContent: "center" }}>
         <AddInvoice onHandleScan={handleScan} />
       </View>
     </View>
   );
+  
 }
 
 export default Home;

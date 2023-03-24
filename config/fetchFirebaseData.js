@@ -1,5 +1,5 @@
-import { getDocs, query, where, orderBy } from "firebase/firestore";
-import { app, db, getFirestore, collection, addDoc } from "./firebase-config";
+import { getDocs, query, where, orderBy, startAt, endAt } from "firebase/firestore";
+import { app, db, collection, addDoc, ref } from "./firebase-config";
 
 const fetchFirebaseDataMatch = async (
   collectionName,
@@ -22,38 +22,36 @@ const fetchFirebaseDataMatch = async (
   return invoices;
 };
 
-export const fetchFirebaseExistingInvoice = async (
+export const fetchFirebaseLikeAt = async (
   collectionName,
   searchFieldName,
   searchValue,
   searchFieldName1,
-  searchValue1
+  searchValue1,
 ) => {
   let invoices = [];
-  let firebaseQuery = null;
-  let querySnapshot = null;
   try {
-      console.log('chave e email ', searchFieldName, searchValue1)
-    firebaseQuery = query(
-      collection(db, collectionName),
-      where(searchFieldName, "==", searchValue)
-    );
-    querySnapshot = await getDocs(firebaseQuery);
-    if (!querySnapshot.empty) {
-      firebaseQuery = query(
+    const startAtNameRes = query(
         collection(db, collectionName),
-        where(searchFieldName1, "==", searchValue1)
+        where(searchFieldName, "==", searchValue),
+        where(searchFieldName1, ">=", searchValue1),
+        where(searchFieldName1,"<=", searchValue1 + "\uf8ff")
       );
-      if (!querySnapshot.empty) {
-          querySnapshot = await getDocs(firebaseQuery);
-      }
-    }
-    console.log('query snaph ', querySnapshot.empty)
+    //   const startAtNameRes = query(
+    //     collection(db, collectionName),
+    //     where("email", "==", "jimenslima@gmail.com"),
+    //     where("emitente.razao_social", ">=", "COM"),
+    //     where("emitente.razao_social","<=","COM" + "\uf8ff")
+    //   );
+
+    const querySnapshot = await getDocs(startAtNameRes);
     querySnapshot.forEach((doc) => {
       invoices.push(doc.data());
     });
+
+    console.log("fire like ", invoices.length);
   } catch (error) {
-    console.log("error from firebase query multiple fields", error);
+    console.log("error from firebase query fields starting with ", error);
   }
   return invoices;
 };

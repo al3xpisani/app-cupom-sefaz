@@ -8,7 +8,6 @@ import { RootSiblingParent } from "react-native-root-siblings";
 import {
   app,
   db,
-  getFirestore,
   collection,
   addDoc,
 } from "../../config/firebase-config";
@@ -99,6 +98,7 @@ export default function ScanScreen() {
         nfe.emitente = response.emitente;
         nfe.produtos = response.produtos;
         nfe.status = response.status;
+        nfe.razao_social = response.emitente.razao_social;
         fetchFirebaseDataMatch(
           "nota-fiscal",
           "chave",

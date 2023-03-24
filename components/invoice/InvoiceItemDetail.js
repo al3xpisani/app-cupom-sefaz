@@ -11,6 +11,7 @@ import {
   SafeAreaView,
   VirtualizedList,
 } from "react-native";
+import { ElipsizeText } from "../../utils/ElipsizeText";
 
 const InvoiceItemDetail = ({ route }) => {
   const { details } = route.params;
@@ -63,6 +64,8 @@ const InvoiceItemDetail = ({ route }) => {
 
   const { endereco, numero, bairro, cidade, uf } = details.emitente;
   const address = `${endereco}, ${numero}, ${bairro} - ${cidade} ${uf || ""}`;
+  const elipsizeTextMain = ElipsizeText(details.emitente.razao_social, 37)
+  const elipsizeTextsubTitle = ElipsizeText(details.emitente.razao_social, 25)
 
   const RenderInvoiceBody = () => {
     return (
@@ -79,10 +82,10 @@ const InvoiceItemDetail = ({ route }) => {
             />
             <View>
               <Text style={{ fontSize: 21, fontWeight: 700 }}>
-                {details.emitente.razao_social}
+                {elipsizeTextMain}
               </Text>
               <Text>CNPJ {details.emitente.cnpj}</Text>
-              <Text>{details.emitente.razao_social}</Text>
+              <Text>{elipsizeTextsubTitle}</Text>
             </View>
           </View>
 
