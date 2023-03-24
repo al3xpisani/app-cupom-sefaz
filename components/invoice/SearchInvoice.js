@@ -6,8 +6,6 @@ import { StyleSheet, View, Button, Image, Text } from "react-native";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 
   const SearchInvoice = ({handleSearchInvoice}) => {
-    // const [input, setInput] = useState("");
-    // const inputRef = useRef('')
     return (
       <View style={{ flex: 1, justifyContent: "center", paddingTop: 20 }}>
         <Input

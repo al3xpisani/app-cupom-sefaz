@@ -1,14 +1,10 @@
-import React, { useEffect, useState, createContext, useContext } from "react";
-import { Input } from "react-native-elements";
+import React, { useEffect, useState, useContext } from "react";
 import {
-  Alert,
   Image,
   Text,
   StyleSheet,
   View,
   ScrollView,
-  TouchableOpacity,
-  Button,
   Pressable,
 } from "react-native";
 import {
@@ -16,15 +12,11 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { BlurView } from "expo-blur";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../../config/firebase-config";
-import { useNavigation, StackActions } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { zeqContext } from "../../context/context";
 import { TextInput } from "react-native-paper";
-
-const cesarLogo =
-  "https://www.cesar.org.br/image/layout_set_logo?img_id=1086110&t=1673865791645";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -72,34 +64,11 @@ function Login() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* <View
-        style={
-          {
-            width: "100%",
-            height: "100%",
-            position: "absolute",
-            backgroundColor: "#14d864",
-          }
-        }
-      > */}
       <Image
         source={require("../../assets/images/ic_ZQlogo.png")}
         style={{ width: 50, height: 50 }}
       />
-      <Text
-        style={
-          {
-            // fontSize: 50,
-            // fontWeight: "bold",
-            // color: "white",
-            // textAlign: "center",
-            // marginTop: 100,
-            //             font-size: 22px;
-            // font-weight: 800;
-            // color: #540d6e;
-          }
-        }
-      >
+      <Text>
         <Text style={{ fontSize: 22, fontWeight: 800, color: "#540d6e" }}>
           ZeQ -{" "}
         </Text>
@@ -107,30 +76,19 @@ function Login() {
           Zero Queue
         </Text>
       </Text>
-      {/* </View> */}
-
-      {/* <ScrollView
-
-      > */}
-      {/* <BlurView intensity={100}> */}
       <View style={styles.login}>
         <View>
-          {/* <Text style={{ fontSize: 17, fontWeight: "400" }}>Email</Text> */}
           <TextInput
             onChangeText={(text) => setEmail(text)}
-            // style={styles.input}
-            // placeholder="Email"
             label="Email"
             mode="outlined"
           />
         </View>
         <View>
-          {/* <Text style={{ fontSize: 17, fontWeight: "400" }}>Password</Text> */}
           <TextInput
             size="large"
             secureTextEntry={secureTextEntry}
             onChangeText={(text) => setPassword(text)}
-            // style={styles.input}
             label="Senha"
             mode="outlined"
             right={
@@ -147,31 +105,11 @@ function Login() {
         <View
           style={{
             flexDirection: "column",
-            // flex: 1,
             justifyContent: "space-between",
             display: "flex",
             gap: 10,
           }}
         >
-          {/* <TouchableOpacity
-              onPress={handleLogin}
-              style={[styles.button, { backgroundColor: "#00CFEB90" }]}
-            >
-              <Text style={{ fontSize: 17, fontWeight: "400", color: "white" }}>
-                Login
-              </Text>
-            </TouchableOpacity> */}
-          {/* <TouchableOpacity
-              onPress={handleCreateAccount}
-              style={[styles.button, { backgroundColor: "#6792F098" }]}
-            >
-              <Text style={{ fontSize: 17, fontWeight: "400", color: "white" }}>
-                Criar Conta
-              </Text>
-            </TouchableOpacity> */}
-
-          {/* <Button title="Login" color="#04b44c" style={{ height: 90 }} /> */}
-
           <Pressable
             style={{
               backgroundColor: "#04b44c",
@@ -207,14 +145,9 @@ function Login() {
           </Pressable>
         </View>
       </View>
-      {/* </BlurView> */}
-      {/* </ScrollView> */}
       <View
         style={{
-          // position: "absolute",
-          // bottom: 0,
           width: "100%",
-          // height: 100,
           alignItems: "center",
           justifyContent: "center",
           marginTop: "auto",
@@ -227,12 +160,10 @@ function Login() {
             fontWeight: "400",
             color: "white",
             marginBottom: 5,
-            // marginTop: "auto",
           }}
         >
           Desenvolvido por
         </Text>
-        {/* <Image source={{ cesarLogo }} style={StyleSheet.absoluteFill} /> */}
         <Image source={require("../../assets/images/ic_cesarLOGO.png")} />
       </View>
     </ScrollView>
@@ -241,57 +172,20 @@ function Login() {
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
     backgroundColor: "#14d864",
     alignItems: "center",
-    // justifyContent: "space-between",
     height: "100%",
     minHeight: 700,
     gap: 20,
     paddingTop: 60,
   },
-  containerInvoiceListing: {
-    padding: 10,
-    flex: 1,
-    backgroundColor: "#FFFFFF",
-  },
-  button: {
-    width: 250,
-    height: 40,
-    borderRadius: 10,
-    alignItems: "center",
-    padding: 10,
-  },
   login: {
     width: 350,
-    // height: 300,
-    // borderColor: "#6792F098",
-    // borderWidth: 2,
     borderRadius: 20,
     padding: 10,
-    // alignItems: "center",
     backgroundColor: "#ffffff",
     display: "flex",
     gap: 15,
-  },
-  input: {
-    width: 330,
-    height: 40,
-    // borderColor: "#fff",
-    borderWidth: 2,
-    borderRadius: 10,
-    padding: 10,
-    marginVertical: 10,
-    backgroundColor: "#ffffff90",
-    marginBottom: 20,
-  },
-  imageStyle: {
-    padding: 10,
-    margin: 5,
-    height: 25,
-    width: 25,
-    resizeMode: "stretch",
-    alignItems: "center",
   },
 });
 

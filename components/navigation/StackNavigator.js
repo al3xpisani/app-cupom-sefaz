@@ -28,7 +28,7 @@ function StackNavigator() {
           options={navigationOptions("Salvar nota", "#ffffff", "#540d6e")}
         />
         <Stack.Screen
-          name="Espelho da nota"
+          name="InvoiceDetail"
           component={InvoiceItemDetail}
           options={navigationOptions("Espelho nota", "#ffffff", "#540d6e")}
         />

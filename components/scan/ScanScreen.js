@@ -2,16 +2,11 @@ import React, { useState, useEffect, useContext } from "react";
 import { Text, View, StyleSheet, Button, Alert } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useNavigation } from "@react-navigation/native";
+import Toast from 'react-native-root-toast';
 import NfeAPI from "../../services/NFeAPI";
 import { zeqContext } from "../../context/context";
 import { RootSiblingParent } from "react-native-root-siblings";
-import {
-  app,
-  db,
-  collection,
-  addDoc,
-} from "../../config/firebase-config";
-import fetchFirebaseDataMatch from "../../config/fetchFirebaseData";
+import fetchFirebaseDataMatch, { addFirebaseDocument } from "../../config/fetchFirebaseData";
 
 const MAX_ATTEMPTS = 10;
 
@@ -23,12 +18,11 @@ export default function ScanScreen() {
 
   const addNfe = async (nfe) => {
     try {
-      // alert("Salvando no Firebase "+ JSON.stringify(nfe));
-      const docRef = await addDoc(collection(db, "nota-fiscal"), nfe);
-      console.log("NFE inserida com sucesso: ", docRef.id);
-      navigation.navigate("Home");
+      addFirebaseDocument(nfe,"nota-fiscal").then(()=>{
+        navigation.navigate("Home");
+      })
     } catch (e) {
-      console.error("Falha ao adicionar a NFE: ", e);
+      console.error("Falha ao adicionar a NFE: (ScanScreen) ", e);
     }
   };
 
@@ -44,15 +38,22 @@ export default function ScanScreen() {
           url_notificacao: "https://cesar.org.br",
         });
 
-        // alert(JSON.stringify(response.data));
-
         if (response.data.status === "concluido") {
           return response.data;
         } else {
           await new Promise((resolve) => setTimeout(resolve, 300));
         }
       } catch (error) {
-        alert("Erro" + JSON.stringify(error));
+        Toast.show('Erro ao acessar servidor. O App fará mais tentativas.', {
+          duration: Toast.durations.LONG,
+          position: Toast.positions.BOTTOM,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 0,
+          backgroundColor: "#540d6e",
+          textColor: "#ffffff"
+        })
         console.log(error);
         attempts++;
       }
