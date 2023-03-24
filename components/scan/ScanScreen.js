@@ -5,7 +5,6 @@ import { useNavigation } from "@react-navigation/native";
 import Toast from 'react-native-root-toast';
 import NfeAPI from "../../services/NFeAPI";
 import { zeqContext } from "../../context/context";
-import { RootSiblingParent } from "react-native-root-siblings";
 import fetchFirebaseDataMatch, { addFirebaseDocument } from "../../config/fetchFirebaseData";
 
 const MAX_ATTEMPTS = 10;
@@ -130,7 +129,6 @@ export default function ScanScreen() {
   }
 
   return (
-    <RootSiblingParent>
       <View style={styles.container}>
         <BarCodeScanner
           onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
@@ -140,7 +138,6 @@ export default function ScanScreen() {
           <Button title={"Ler QRCode"} onPress={() => setScanned(false)} />
         )}
       </View>
-    </RootSiblingParent>
   );
 }
 

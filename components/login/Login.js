@@ -12,6 +12,8 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import { RootSiblingParent } from "react-native-root-siblings";
+import Toast from 'react-native-root-toast';
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../../config/firebase-config";
 import { useNavigation } from "@react-navigation/native";
@@ -39,14 +41,30 @@ function Login() {
   const handleCreateAccount = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        alert("Conta Criada com Sucesso");
-        const user = userCredential.user;
+        Toast.show('Conta criada com sucesso!', {
+          duration: Toast.durations.LONG,
+          position: Toast.positions.BOTTOM,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 0,
+          backgroundColor: "#540d6e",
+          textColor: "#ffffff"
+        })
       })
       .catch((error) => {
-        alert(error.message);
+        console.log(error)
+        Toast.show(String(error) , {
+          duration: Toast.durations.LONG,
+          position: Toast.positions.BOTTOM,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 0,
+          backgroundColor: "#540d6e",
+          textColor: "#ffffff"
+        })
         console.log("Error" + error);
-        const errorCode = error.code;
-        const errorMessage = error.message;
       });
   };
 
@@ -54,13 +72,20 @@ function Login() {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log("Logged In");
-        const user = userCredential.user;
         navigation.navigate("Home");
       })
       .catch((error) => {
-        console.log("Error" + error);
-        const errorCode = error.code;
-        const errorMessage = error.message;
+        console.log("Error ==>" + error);
+        Toast.show("Usuário ou senha inválidos", {
+          duration: Toast.durations.LONG,
+          position: Toast.positions.BOTTOM,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          delay: 0,
+          backgroundColor: "#540d6e",
+          textColor: "#ffffff"
+        })
       });
   };
 
