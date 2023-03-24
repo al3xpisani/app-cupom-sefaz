@@ -1,19 +1,23 @@
+import React, { useEffect } from "react";
 import {
-  Alert,
   Image,
   Text,
-  StyleSheet,
   View,
-  ScrollView,
-  TouchableOpacity,
-  TextInput,
-  Button,
-  SafeAreaView,
   VirtualizedList,
 } from "react-native";
 import { ElipsizeText } from "../../utils/ElipsizeText";
+import { useIsFocused } from "@react-navigation/native";
+import useViewAnimation from "../hooks/useViewAnimation";
 
 const InvoiceItemDetail = ({ route }) => {
+  const isFocused = useIsFocused();
+  
+  useEffect(() => {
+    if (isFocused) {
+        useViewAnimation()
+    }
+  }, [isFocused]);
+  
   const { details } = route.params;
 
   const getItem = (_data, index) => {
@@ -151,7 +155,7 @@ const InvoiceItemDetail = ({ route }) => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ height: "100%" }}>
       <View style={{ flex: 10, position: "relative" }}>
         <RenderInvoiceBody />
       </View>

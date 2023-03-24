@@ -11,7 +11,7 @@ import {
       UIManager.setLayoutAnimationEnabledExperimental(true);
     }
     LayoutAnimation.configureNext({
-      duration: 1500,
+      duration: 1000,
       create: {type: 'linear', property: 'opacity'},
       update: {type: 'spring', springDamping: 0.4},
       delete: {type: 'linear', property: 'opacity'},

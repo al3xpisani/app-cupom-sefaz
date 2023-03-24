@@ -191,12 +191,6 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     marginHorizontal: 16,
   },
-  moveRight: {
-    alignSelf: 'flex-end',
-  },
-  left: {
-    alignSelf: 'flex-start',
-  },
 });
 
 export default ListInvoices;

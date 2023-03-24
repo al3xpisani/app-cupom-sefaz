@@ -17,6 +17,7 @@ import { firebaseConfig } from "../../config/firebase-config";
 import { useNavigation } from "@react-navigation/native";
 import { zeqContext } from "../../context/context";
 import { TextInput } from "react-native-paper";
+import useViewAnimation from "../hooks/useViewAnimation";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -32,6 +33,7 @@ function Login() {
 
   useEffect(() => {
     setLoggedUser(email.toLowerCase());
+    useViewAnimation()
   }, [email]);
 
   const handleCreateAccount = () => {
