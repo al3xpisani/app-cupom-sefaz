@@ -6,20 +6,19 @@ import {
   View,
   ScrollView,
   Pressable,
+  SafeAreaView,
 } from "react-native";
 import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { RootSiblingParent } from "react-native-root-siblings";
-import Toast from 'react-native-root-toast';
+import Toast from "react-native-root-toast";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../../config/firebase-config";
 import { useNavigation } from "@react-navigation/native";
 import { zeqContext } from "../../context/context";
 import { TextInput } from "react-native-paper";
-import useViewAnimation from "../hooks/useViewAnimation";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -35,38 +34,32 @@ function Login() {
 
   useEffect(() => {
     setLoggedUser(email.toLowerCase());
-    useViewAnimation()
   }, [email]);
 
   const handleCreateAccount = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        Toast.show('Conta criada com sucesso!', {
-          duration: Toast.durations.LONG,
-          position: Toast.positions.BOTTOM,
-          shadow: true,
-          animation: true,
-          hideOnPress: true,
-          delay: 0,
-          backgroundColor: "#540d6e",
-          textColor: "#ffffff"
-        })
+        showToastMessage("Conta criada com sucesso!")
       })
       .catch((error) => {
-        console.log(error)
-        Toast.show(String(error) , {
-          duration: Toast.durations.LONG,
-          position: Toast.positions.BOTTOM,
-          shadow: true,
-          animation: true,
-          hideOnPress: true,
-          delay: 0,
-          backgroundColor: "#540d6e",
-          textColor: "#ffffff"
-        })
+        console.log(error);
+        showToastMessage(error)
         console.log("Error" + error);
       });
   };
+
+  const showToastMessage = (title) => {
+    Toast.show(String(title), {
+      duration: Toast.durations.LONG,
+      position: Toast.positions.BOTTOM,
+      shadow: true,
+      animation: true,
+      hideOnPress: true,
+      delay: 0,
+      backgroundColor: "#540d6e",
+      textColor: "#ffffff",
+    });
+  }
 
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, email, password)
@@ -84,116 +77,122 @@ function Login() {
           hideOnPress: true,
           delay: 0,
           backgroundColor: "#540d6e",
-          textColor: "#ffffff"
-        })
+          textColor: "#ffffff",
+        });
       });
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Image
-        source={require("../../assets/images/ic_ZQlogo.png")}
-        style={{ width: 50, height: 50 }}
-      />
-      <Text>
-        <Text style={{ fontSize: 22, fontWeight: 800, color: "#540d6e" }}>
-          ZeQ -{" "}
-        </Text>
-        <Text style={{ fontSize: 22, fontWeight: 400, color: "#540d6e" }}>
-          Zero Queue
-        </Text>
-      </Text>
-      <View style={styles.login}>
-        <View>
-          <TextInput
-            onChangeText={(text) => setEmail(text)}
-            label="Email"
-            mode="outlined"
+    <SafeAreaView>
+        <ScrollView contentContainerStyle={styles.container}>
+          <Image
+            source={require("../../assets/images/ic_ZQlogo.png")}
+            style={{ width: 50, height: 50 }}
           />
-        </View>
-        <View>
-          <TextInput
-            size="large"
-            secureTextEntry={secureTextEntry}
-            onChangeText={(text) => setPassword(text)}
-            label="Senha"
-            mode="outlined"
-            right={
-              <TextInput.Icon
-                icon="eye"
-                onPress={() => setSecureTextEntry(!secureTextEntry)}
+          <Text>
+            <Text style={{ fontSize: 22, fontWeight: 800, color: "#540d6e" }}>
+              ZeQ -{" "}
+            </Text>
+            <Text style={{ fontSize: 22, fontWeight: 400, color: "#540d6e" }}>
+              Zero Queue
+            </Text>
+          </Text>
+          <View style={styles.login}>
+            <View>
+              <TextInput
+                onChangeText={(text) => setEmail(text)}
+                label="Email"
+                mode="outlined"
               />
-            }
-          />
-        </View>
+            </View>
+            <View>
+              <TextInput
+                size="large"
+                secureTextEntry={secureTextEntry}
+                onChangeText={(text) => setPassword(text)}
+                label="Senha"
+                mode="outlined"
+                right={
+                  <TextInput.Icon
+                    icon="eye"
+                    onPress={() => setSecureTextEntry(!secureTextEntry)}
+                  />
+                }
+              />
+            </View>
 
-        <Text style={{ color: "#14d864" }}>Exqueceu sua senha?</Text>
+            <Text style={{ color: "#14d864" }}>Esqueceu sua senha?</Text>
 
-        <View
-          style={{
-            flexDirection: "column",
-            justifyContent: "space-between",
-            display: "flex",
-            gap: 10,
-          }}
-        >
-          <Pressable
+            <View
+              style={{
+                flexDirection: "column",
+                justifyContent: "space-between",
+                display: "flex",
+                gap: 10,
+              }}
+            >
+              <Pressable
+                style={{
+                  backgroundColor: "#04b44c",
+                  height: 56,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderRadius: 10,
+                  width: 330,
+                }}
+                onPress={handleLogin}
+              >
+                <Text
+                  style={{ fontSize: 16, fontWeight: 700, color: "#ffffff" }}
+                >
+                  LOGIN
+                </Text>
+              </Pressable>
+
+              <Pressable
+                style={{
+                  backgroundColor: "#6792F098",
+                  height: 56,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderRadius: 10,
+                  width: 330,
+                }}
+                onPress={handleCreateAccount}
+              >
+                <Text
+                  style={{ fontSize: 16, fontWeight: 700, color: "#ffffff" }}
+                >
+                  CRIAR CONTA
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+          <View
             style={{
-              backgroundColor: "#04b44c",
-              height: 56,
-              display: "flex",
-              justifyContent: "center",
+              width: "100%",
               alignItems: "center",
-              borderRadius: 10,
-              width: 330,
-            }}
-            onPress={handleLogin}
-          >
-            <Text style={{ fontSize: 16, fontWeight: 700, color: "#ffffff" }}>
-              LOGIN
-            </Text>
-          </Pressable>
-
-          <Pressable
-            style={{
-              backgroundColor: "#6792F098",
-              height: 56,
-              display: "flex",
               justifyContent: "center",
-              alignItems: "center",
-              borderRadius: 10,
-              width: 330,
+              marginTop: "auto",
+              marginBottom: 10,
             }}
-            onPress={handleCreateAccount}
           >
-            <Text style={{ fontSize: 16, fontWeight: 700, color: "#ffffff" }}>
-              CRIAR CONTA
+            <Text
+              style={{
+                fontSize: 17,
+                fontWeight: "400",
+                color: "white",
+                marginBottom: 5,
+              }}
+            >
+              Desenvolvido por
             </Text>
-          </Pressable>
-        </View>
-      </View>
-      <View
-        style={{
-          width: "100%",
-          alignItems: "center",
-          justifyContent: "center",
-          marginTop: "auto",
-          marginBottom: 10,
-        }}
-      >
-        <Text
-          style={{
-            fontSize: 17,
-            fontWeight: "400",
-            color: "white",
-            marginBottom: 5,
-          }}
-        >
-          Desenvolvido por
-        </Text>
-        <Image source={require("../../assets/images/ic_cesarLOGO.png")} />
-      </View>
-    </ScrollView>
+            <Image source={require("../../assets/images/ic_cesarLOGO.png")} />
+          </View>
+        </ScrollView>
+    </SafeAreaView>
   );
 }
 

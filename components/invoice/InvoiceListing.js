@@ -73,11 +73,12 @@ function ListInvoices({ searchText }) {
       "data_emissao",
       false
     ).then((item) => {
-      setIsLoading(false);
-      setRefreshing(false);
-      setInvoices(item);
-      setBackSpaceChar(0);
-      useViewAnimation()
+      useViewAnimation().then(()=> {
+        setIsLoading(false);
+        setRefreshing(false);
+        setInvoices(item);
+        setBackSpaceChar(0);
+      })
     });
   };
 
