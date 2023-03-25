@@ -55,7 +55,7 @@ const InvoiceItemBodyDetail = ({invoiceItens}) => {
 
           <View style={{ diplay: "flex", flexDirection: "row", gap: 15 }}>
             <Image
-              source={require("../../assets/images/ic_loja.png")}
+              source={require("../../../assets/images/ic_loja.png")}
               style={{ width: 50, height: 50 }}
             />
             <View>

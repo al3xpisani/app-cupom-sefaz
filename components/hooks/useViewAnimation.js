@@ -18,7 +18,7 @@ import {
             update: {type: 'spring', springDamping: 0.4},
             delete: {type: 'linear', property: 'opacity'},
           });
-          resolve('AnimationPromiseMounted')
+          resolve(true)
         },100)
       })
       return mountAnimation

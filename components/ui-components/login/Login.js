@@ -13,12 +13,12 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import Toast from "react-native-root-toast";
 import { initializeApp } from "firebase/app";
-import { firebaseConfig } from "../../config/firebase-config";
+import { firebaseConfig } from "../../../config/firebase-config";
 import { useNavigation } from "@react-navigation/native";
-import { zeqContext } from "../../context/context";
+import { zeqContext } from "../../../context/context";
 import { TextInput } from "react-native-paper";
+import { ShowToast } from "../../helpers/ShowToast";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -26,9 +26,9 @@ function Login() {
   const { setLoggedUser } = useContext(zeqContext);
   const [navigateToHome, setNavigateToHome] = useState(false);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
-
+  
   const navigation = useNavigation();
-
+  
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
 
@@ -39,27 +39,14 @@ function Login() {
   const handleCreateAccount = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        showToastMessage("Conta criada com sucesso!")
+        ShowToast("Conta criada com sucesso")
       })
       .catch((error) => {
         console.log(error);
-        showToastMessage(error)
+        ShowToast(error)
         console.log("Error" + error);
       });
   };
-
-  const showToastMessage = (title) => {
-    Toast.show(String(title), {
-      duration: Toast.durations.LONG,
-      position: Toast.positions.BOTTOM,
-      shadow: true,
-      animation: true,
-      hideOnPress: true,
-      delay: 0,
-      backgroundColor: "#540d6e",
-      textColor: "#ffffff",
-    });
-  }
 
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, email, password)
@@ -69,16 +56,7 @@ function Login() {
       })
       .catch((error) => {
         console.log("Error ==>" + error);
-        Toast.show("Usuário ou senha inválidos", {
-          duration: Toast.durations.LONG,
-          position: Toast.positions.BOTTOM,
-          shadow: true,
-          animation: true,
-          hideOnPress: true,
-          delay: 0,
-          backgroundColor: "#540d6e",
-          textColor: "#ffffff",
-        });
+        ShowToast("Usuário ou senha inválidos")
       });
   };
 
@@ -86,7 +64,7 @@ function Login() {
     <SafeAreaView>
         <ScrollView contentContainerStyle={styles.container}>
           <Image
-            source={require("../../assets/images/ic_ZQlogo.png")}
+            source={require("../../../assets/images/ic_ZQlogo.png")}
             style={{ width: 50, height: 50 }}
           />
           <Text>
@@ -189,7 +167,7 @@ function Login() {
             >
               Desenvolvido por
             </Text>
-            <Image source={require("../../assets/images/ic_cesarLOGO.png")} />
+            <Image source={require("../../../assets/images/ic_cesarLOGO.png")} />
           </View>
         </ScrollView>
     </SafeAreaView>

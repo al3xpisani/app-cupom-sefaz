@@ -9,14 +9,14 @@ import {
   VirtualizedList,
 } from "react-native";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
-import Animate from "../animatedView/Animate";
-import { TimeStampStringFormat } from "../../utils/TimeStamp";
-import { ElipsizeText } from "../../utils/ElipsizeText";
-import { zeqContext } from "../../context/context";
+import LoadSpinning from "../../loadspinning/LoadSpinning";
+import { TimeStampStringFormat } from "../../../utils/TimeStamp";
+import { ElipsizeText } from "../../../utils/ElipsizeText";
+import { zeqContext } from "../../../context/context";
 import fetchFirebaseDataMatch, {
   fetchFirebaseLikeAt,
-} from "../../config/fetchFirebaseData";
-import useViewAnimation from "../hooks/useViewAnimation";
+} from "../../../config/fetchFirebaseData";
+import useViewAnimation from "../../hooks/useViewAnimation";
 
 function ListInvoices({ searchText }) {
   const characterLimit = 3;
@@ -170,7 +170,7 @@ function ListInvoices({ searchText }) {
         }}
         >
           <Image
-            source={require("../../assets/images/noinvoice.png")}
+            source={require("../../../assets/images/noinvoice.png")}
             style={{ width: 60, height: 60 }}
             />
           <Text style={{ paddingTop: 20, color: "grey", fontSize: 16 }}>
@@ -178,7 +178,7 @@ function ListInvoices({ searchText }) {
           </Text>
         </View>
       )}
-      {isLoading && <Animate />}
+      {isLoading && <LoadSpinning />}
     </SafeAreaView>
   );
 }

@@ -3,9 +3,9 @@ import { Text, View, StyleSheet, Button, Alert } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useNavigation } from "@react-navigation/native";
 import Toast from 'react-native-root-toast';
-import NfeAPI from "../../services/NFeAPI";
-import { zeqContext } from "../../context/context";
-import fetchFirebaseDataMatch, { addFirebaseDocument } from "../../config/fetchFirebaseData";
+import NfeAPI from "../../../services/NFeAPI";
+import { zeqContext } from "../../../context/context";
+import fetchFirebaseDataMatch, { addFirebaseDocument } from "../../../config/fetchFirebaseData";
 
 const MAX_ATTEMPTS = 10;
 

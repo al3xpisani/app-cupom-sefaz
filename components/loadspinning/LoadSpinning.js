@@ -3,7 +3,7 @@ import {View, StyleSheet, SafeAreaView, Animated, Easing} from 'react-native';
 import Icon from "react-native-vector-icons/FontAwesome";
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
-const Animate = () => {
+const LoadSpinning = () => {
     const spinValue = new Animated.Value(0);
 
     const spin = () => {
@@ -36,7 +36,7 @@ const Animate = () => {
 
 }
 
-export default Animate
+export default LoadSpinning
 
 const styles = StyleSheet.create({
     container: {

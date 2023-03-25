@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, SafeAreaView } from "react-native";
-import { ElipsizeText } from "../../utils/ElipsizeText";
+import { Text, View, SafeAreaView, useAnimatedValue } from "react-native";
+import { ElipsizeText } from "../../../utils/ElipsizeText";
 import { useIsFocused } from "@react-navigation/native";
 import InvoiceItemBodyDetail from "./InvoiceItemBodyDetail";
-import useViewAnimation from "../hooks/useViewAnimation";
+import useViewAnimation from "../../hooks/useViewAnimation";
 
 const InvoiceItemDetail = ({ route }) => {
   const isFocused = useIsFocused();

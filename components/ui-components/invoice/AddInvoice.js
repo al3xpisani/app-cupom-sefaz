@@ -1,6 +1,6 @@
 
 import { View, Button, Image } from "react-native";
-import { useNavigation, useIsFocused } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
   const AddInvoice = () => {
     const navigation = useNavigation();
@@ -22,7 +22,7 @@ import { useNavigation, useIsFocused } from "@react-navigation/native";
         }}
       >
         <Image
-          source={require("../../assets/images/labelinvoicebuttonsmall.png")}
+          source={require("../../../assets/images/labelinvoicebuttonsmall.png")}
           style={{ width: 22, height: 23 }}
         />
         <Button

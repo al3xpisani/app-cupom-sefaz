@@ -1,3 +1,3 @@
-import React, { createContext } from "react";
+import React, { createContext, useState } from "react";
 
-export const zeqContext = createContext({loggedUser: '',setLoggedUser: () => {}});
+export const zeqContext = createContext();

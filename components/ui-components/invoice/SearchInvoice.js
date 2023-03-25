@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import { Input } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
-import ListInvoices from "../invoice/InvoiceListing";
-import { StyleSheet, View, Button, Image, Text } from "react-native";
-import { useNavigation, useIsFocused } from "@react-navigation/native";
+import { View } from "react-native";
 
   const SearchInvoice = ({handleSearchInvoice}) => {
     return (
