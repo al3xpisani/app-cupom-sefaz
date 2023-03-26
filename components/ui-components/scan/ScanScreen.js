@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { Text, View, StyleSheet, Button, Alert } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useNavigation } from "@react-navigation/native";
 import Toast from 'react-native-root-toast';
 import NfeAPI from "../../../services/NFeAPI";
-import { zeqContext } from "../../../context/context";
+import { useSelector} from  'react-redux'
 import fetchFirebaseDataMatch, { addFirebaseDocument } from "../../../config/fetchFirebaseData";
 
 const MAX_ATTEMPTS = 10;
@@ -13,7 +13,7 @@ export default function ScanScreen() {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const navigation = useNavigation();
-  const { loggedUser } = useContext(zeqContext);
+  const {loggedUser} = useSelector((state)=> state.logins)
 
   const addNfe = async (nfe) => {
     try {

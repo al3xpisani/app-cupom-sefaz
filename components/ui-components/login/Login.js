@@ -16,14 +16,13 @@ import {
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../../../config/firebase-config";
 import { useNavigation } from "@react-navigation/native";
-import { zeqContext } from "../../../context/context";
 import { TextInput } from "react-native-paper";
 import { ShowToast } from "../../helpers/ShowToast";
+import { useSelector, useDispatch } from 'react-redux'
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { setLoggedUser } = useContext(zeqContext);
   const [navigateToHome, setNavigateToHome] = useState(false);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   
@@ -32,10 +31,13 @@ function Login() {
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
 
-  useEffect(() => {
-    setLoggedUser(email.toLowerCase());
-  }, [email]);
+  const { loggedUser } = useSelector((state)=> state.logins)
+  const dispatch = useDispatch()
 
+  useEffect(() => {
+    dispatch({ type: 'login/loginRegistered', payload: email.toLowerCase() })
+  }, [email]);
+  console.log('====> ', loggedUser)
   const handleCreateAccount = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {

@@ -12,21 +12,21 @@ import { useNavigation, useIsFocused } from "@react-navigation/native";
 import LoadSpinning from "../../loadspinning/LoadSpinning";
 import { TimeStampStringFormat } from "../../../utils/TimeStamp";
 import { ElipsizeText } from "../../../utils/ElipsizeText";
-import { zeqContext } from "../../../context/context";
 import fetchFirebaseDataMatch, {
   fetchFirebaseLikeAt,
 } from "../../../config/fetchFirebaseData";
 import useViewAnimation from "../../hooks/useViewAnimation";
+import { useSelector } from 'react-redux'
 
 function ListInvoices({ searchText }) {
   const characterLimit = 3;
   const isFocused = useIsFocused();
   const navigation = useNavigation();
-  const { loggedUser } = useContext(zeqContext);
   const [invoices, setInvoices] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
   const [backSpaceChar, setBackSpaceChar] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const {loggedUser} = useSelector((state)=> state.logins)
 
   useEffect(() => {
     if (isFocused) {

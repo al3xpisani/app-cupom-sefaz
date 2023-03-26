@@ -1,20 +1,21 @@
-import React, { useState, useRe } from "react";
+import React from "react";
+import { Provider } from 'react-redux'
 import StackNavigator from "./components/ui-components/navigation/StackNavigator";
-import { zeqContext } from "./context/context";
 import { Provider as PaperProvider } from "react-native-paper";
 import { RootSiblingParent } from "react-native-root-siblings";
+import { store } from "./store";
+import { AppRegistry } from "react-native";
 
 export default function App() {
-  // const [state, dispatch] = useReducer(loginReducer, initialState);
-  // const { todos, isLoggedIn } = state;
-  const [loggedUser, setLoggedUser] = useState("");
   return (
-    <zeqContext.Provider value={{ loggedUser, setLoggedUser }}>
+    <Provider store={store}>
       <PaperProvider>
         <RootSiblingParent>
           <StackNavigator />
         </RootSiblingParent>
       </PaperProvider>
-    </zeqContext.Provider>
+    </Provider>
   );
 }
+
+AppRegistry.registerComponent("App",App)
