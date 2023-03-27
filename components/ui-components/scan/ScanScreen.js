@@ -4,16 +4,16 @@ import { BarCodeScanner } from "expo-barcode-scanner";
 import { useNavigation } from "@react-navigation/native";
 import Toast from 'react-native-root-toast';
 import NfeAPI from "../../../services/NFeAPI";
-import { useSelector} from  'react-redux'
+import { connect } from  'react-redux'
 import fetchFirebaseDataMatch, { addFirebaseDocument } from "../../../config/fetchFirebaseData";
 
 const MAX_ATTEMPTS = 10;
 
-export default function ScanScreen() {
+function ScanScreen(props) {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const navigation = useNavigation();
-  const {loggedUser} = useSelector((state)=> state.logins)
+  const { loggedUser } = props.login
 
   const addNfe = async (nfe) => {
     try {
@@ -148,3 +148,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
+
+
+const mapStateToProps = function(state) {
+  return {
+    login: state.logins,
+  }
+}
+
+export default connect(mapStateToProps,null)(ScanScreen);

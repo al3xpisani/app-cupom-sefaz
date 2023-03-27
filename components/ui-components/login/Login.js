@@ -18,10 +18,10 @@ import { firebaseConfig } from "../../../config/firebase-config";
 import { useNavigation } from "@react-navigation/native";
 import { TextInput } from "react-native-paper";
 import { ShowToast } from "../../helpers/ShowToast";
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch, connect } from 'react-redux'
 import { actionCreators as loginActions } from "../../../redux/actions/loginActions";
 
-function Login({route}) {
+function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [navigateToHome, setNavigateToHome] = useState(false);
@@ -31,13 +31,15 @@ function Login({route}) {
   
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
-  const { loggedUser } = useSelector((state)=> state.logins)
-  const dispatch = useDispatch()
+  // const { loggedUser } = useSelector((state)=> state.logins)
+  const { loggedUser } = props.login
+  // const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(loginActions.registerLogin(email.toLowerCase()))
+    // dispatch(loginActions.registerLogin(email.toLowerCase()))
+    props.registerLogin(email.toLowerCase())
   }, [email]);
-
+  console.log('props......... ', props.login)
   const handleCreateAccount = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
@@ -195,4 +197,14 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+const mapStateToProps = function(state) {
+  return {
+    login: state.logins,
+  }
+}
+
+const mapDispatchToProps = {
+  registerLogin: loginActions.registerLogin,
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(Login);

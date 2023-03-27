@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Image,
   Text,
@@ -16,9 +16,9 @@ import fetchFirebaseDataMatch, {
   fetchFirebaseLikeAt,
 } from "../../../config/fetchFirebaseData";
 import useViewAnimation from "../../hooks/useViewAnimation";
-import { useSelector, useDispatch } from 'react-redux'
+import { connect } from 'react-redux'
 
-function ListInvoices({ searchText }) {
+function ListInvoices(props) {
   const characterLimit = 3;
   const isFocused = useIsFocused();
   const navigation = useNavigation();
@@ -26,15 +26,14 @@ function ListInvoices({ searchText }) {
   const [refreshing, setRefreshing] = useState(false);
   const [backSpaceChar, setBackSpaceChar] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const {loggedUser} = useSelector((state)=> state.logins)
+  const { login: {loggedUser},searchText } = props
 
-  const dispatch = useDispatch()
   useEffect(() => {
     if (isFocused) {
       refreshData();
     }
   }, [isFocused, searchText]);
-  console.log('new users.... ', useSelector((state)=> state.logins))
+
   const refreshData = () => {
     if (searchText.length >= characterLimit) {
       if (ignoreIfBackspaceKey()) return;
@@ -195,4 +194,10 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ListInvoices;
+const mapStateToProps = function(state) {
+  return {
+    login: state.logins,
+  }
+}
+
+export default connect(mapStateToProps,null)(ListInvoices);

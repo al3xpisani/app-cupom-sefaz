@@ -12,8 +12,8 @@ const registerLogin = (state, action) => {
 };
 
 export default function loginReducer(state = initialState, action) {
-  switch (action.type) {
-    case LOGIN_REGISTERLOGIN: {
+    switch (action.type) {
+        case LOGIN_REGISTERLOGIN: {
       return registerLogin(state, action);
     }
     default:
