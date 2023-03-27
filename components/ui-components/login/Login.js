@@ -19,6 +19,7 @@ import { useNavigation } from "@react-navigation/native";
 import { TextInput } from "react-native-paper";
 import { ShowToast } from "../../helpers/ShowToast";
 import { useSelector, useDispatch, connect } from 'react-redux'
+import { bindActionCreators} from '@reduxjs/toolkit'
 import { actionCreators as loginActions } from "../../../redux/actions/loginActions";
 
 function Login(props) {
@@ -37,9 +38,9 @@ function Login(props) {
 
   useEffect(() => {
     // dispatch(loginActions.registerLogin(email.toLowerCase()))
-    props.registerLogin(email.toLowerCase())
+    props.registerLoginAction(email.toLowerCase())
   }, [email]);
-  console.log('props......... ', props.login)
+  console.log('props......... ', props)
   const handleCreateAccount = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
@@ -203,8 +204,11 @@ const mapStateToProps = function(state) {
   }
 }
 
-const mapDispatchToProps = {
-  registerLogin: loginActions.registerLogin,
+function mapDispatchToProps(dispatch) {
+  return { 
+    registerLoginAction: bindActionCreators(loginActions.registerLogin, dispatch) 
+    // anotherLoginAction: bindActionCreators(loginActions.registerLogin, dispatch) 
+  }
 }
 
 export default connect(mapStateToProps,mapDispatchToProps)(Login);
