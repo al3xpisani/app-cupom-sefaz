@@ -19,8 +19,9 @@ import { useNavigation } from "@react-navigation/native";
 import { TextInput } from "react-native-paper";
 import { ShowToast } from "../../helpers/ShowToast";
 import { useSelector, useDispatch } from 'react-redux'
+import { actionCreators as loginActions } from "../../../redux/actions/loginActions";
 
-function Login() {
+function Login({route}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [navigateToHome, setNavigateToHome] = useState(false);
@@ -30,14 +31,13 @@ function Login() {
   
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
-
   const { loggedUser } = useSelector((state)=> state.logins)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch({ type: 'login/loginRegistered', payload: email.toLowerCase() })
+    dispatch(loginActions.registerLogin(email.toLowerCase()))
   }, [email]);
-  console.log('====> ', loggedUser)
+
   const handleCreateAccount = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
@@ -53,7 +53,7 @@ function Login() {
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        console.log("Logged In");
+        console.log("Logged In as ",loggedUser);
         navigation.navigate("Home");
       })
       .catch((error) => {

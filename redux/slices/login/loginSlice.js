@@ -1,20 +1,22 @@
-import { LOGIN_REGISTERLOGIN } from "../../types/loginType"
+import { LOGIN_REGISTERLOGIN } from "../../types/loginType";
 
 const initialState = {
-    loggedUser: ''
-  }
-  
-  export default function loginReducer(state = initialState, action) {
-    switch (action.type) {
-      case LOGIN_REGISTERLOGIN: {
-        console.log('slice.... ', state, action)
-        return {
-          // Again, one less level of nesting to copy
-          ...state,
-          loggedUser: action.payload
-        }
-      }
-      default:
-        return state
+  loggedUser: ""
+};
+
+const registerLogin = (state, action) => {
+  return {
+    ...state,
+    loggedUser: action.payload,
+  };
+};
+
+export default function loginReducer(state = initialState, action) {
+  switch (action.type) {
+    case LOGIN_REGISTERLOGIN: {
+      return registerLogin(state, action);
     }
+    default:
+      return state;
   }
+}

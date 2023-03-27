@@ -16,7 +16,7 @@ import fetchFirebaseDataMatch, {
   fetchFirebaseLikeAt,
 } from "../../../config/fetchFirebaseData";
 import useViewAnimation from "../../hooks/useViewAnimation";
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 
 function ListInvoices({ searchText }) {
   const characterLimit = 3;
@@ -28,12 +28,13 @@ function ListInvoices({ searchText }) {
   const [isLoading, setIsLoading] = useState(true);
   const {loggedUser} = useSelector((state)=> state.logins)
 
+  const dispatch = useDispatch()
   useEffect(() => {
     if (isFocused) {
       refreshData();
     }
   }, [isFocused, searchText]);
-
+  console.log('new users.... ', useSelector((state)=> state.logins))
   const refreshData = () => {
     if (searchText.length >= characterLimit) {
       if (ignoreIfBackspaceKey()) return;
