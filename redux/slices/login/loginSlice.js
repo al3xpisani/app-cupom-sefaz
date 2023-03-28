@@ -1,7 +1,8 @@
-import { LOGIN_REGISTERLOGIN } from "../../types/loginType";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 const initialState = {
-  loggedUser: ""
+  loggedUser: "",
+  todoList: []
 };
 
 const registerLogin = (state, action) => {
@@ -11,12 +12,37 @@ const registerLogin = (state, action) => {
   };
 };
 
-export default function loginReducer(state = initialState, action) {
-    switch (action.type) {
-        case LOGIN_REGISTERLOGIN: {
-      return registerLogin(state, action);
+export const fetchToDoListFromSlice = createAsyncThunk(
+    "todo/fetchList",
+    async (name, { rejectWithValue }) => {
+      try {
+        console.log('name...... ', name)
+        const res = await fetch('https://jsonplaceholder.typicode.com/posts').then(
+    (data) => data.json()
+    )
+        return res;
+      } catch (err) {
+        return rejectWithValue([], err);
+      }
     }
-    default:
-      return state;
-  }
-}
+  );
+
+
+const loginReducer = createSlice({
+    name: 'login',
+    initialState: initialState,
+    reducers: {
+      registerLoginActionFromSlice(state, action) {
+        console.log('insise slice.......................&&&&&&&&', state, action)
+        return registerLogin(state, action)
+      }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(fetchToDoListFromSlice.fulfilled, (state, action) => {
+              state.todoList.push(action.payload[0].title)
+        })
+    }
+  })
+
+export default loginReducer.reducer
+export const { registerLoginActionFromSlice } = loginReducer.actions

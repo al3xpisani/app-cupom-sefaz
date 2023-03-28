@@ -20,7 +20,7 @@ import { TextInput } from "react-native-paper";
 import { ShowToast } from "../../helpers/ShowToast";
 import { useSelector, useDispatch, connect } from 'react-redux'
 import { bindActionCreators} from '@reduxjs/toolkit'
-import { actionCreators as loginActions } from "../../../redux/actions/loginActions";
+import { registerLoginActionFromSlice, fetchToDoListFromSlice } from "../../../redux/slices/login/loginSlice";
 
 function Login(props) {
   const [email, setEmail] = useState("");
@@ -33,12 +33,12 @@ function Login(props) {
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   // const { loggedUser } = useSelector((state)=> state.logins)
-  const { loggedUser } = props.login
-  // const dispatch = useDispatch()
+  const { login: {loggedUser} } = props
+  const { registerLoginActions: {registerLoginActionFromSlice}, fetchTodoList: {fetchToDoListFromSlice}} = props
 
   useEffect(() => {
-    // dispatch(loginActions.registerLogin(email.toLowerCase()))
-    props.registerLoginAction(email.toLowerCase())
+    registerLoginActionFromSlice(email.toLowerCase())
+    fetchToDoListFromSlice("alexxxxxxxxxxxxxxxxxxxxxxxxxxxx")
   }, [email]);
   console.log('props......... ', props)
   const handleCreateAccount = () => {
@@ -205,9 +205,9 @@ const mapStateToProps = function(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return { 
-    registerLoginAction: bindActionCreators(loginActions.registerLogin, dispatch) 
-    // anotherLoginAction: bindActionCreators(loginActions.registerLogin, dispatch) 
+  return {
+    registerLoginActions : bindActionCreators({registerLoginActionFromSlice}, dispatch),
+    fetchTodoList: bindActionCreators({fetchToDoListFromSlice}, dispatch)
   }
 }
 
