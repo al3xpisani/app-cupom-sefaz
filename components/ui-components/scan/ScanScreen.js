@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useNavigation } from "@react-navigation/native";
-import Toast from "react-native-root-toast";
 import NfeAPI from "../../../services/NFeAPI";
 import { connect } from "react-redux";
 import fetchFirebaseDataMatch, {
@@ -19,6 +18,7 @@ import fetchFirebaseDataMatch, {
 import ShowToast from "../../helpers/ShowToast";
 import LoadSpinning from "../../loadspinning/LoadSpinning";
 import { QRCodeBorder } from "../../qrcodeborder/QRCodeBorder";
+import { SyncAlert } from "../../syncalert/SyncAlert";
 
 const MAX_ATTEMPTS = 10;
 
@@ -109,17 +109,12 @@ function ScanScreen(props) {
 
   const handleBarCodeScanned = async ({ type, data: qrCodeData }) => {
     setScanned(true);
-
-    if (qrCodeData.includes("sefaz") == false) {
-      ShowToast("Este não é um documento fiscal válido!");
-      setScanned(false);
+    if (qrCodeData.includes("sefaz") == false && qrCodeData.indexOf('nfce.sefaz.pe.gov.br/nfce-web') === -1) {
+      await SyncAlert("Aviso","Este não é um documento fiscal válido!","OK")
+      setScanned(false)
       return;
     }
-    if(!qrCodeData.indexOf('nfce.sefaz.pe.gov.br/nfce-web')){
-      setScanned(false);
-      return
-    }
-
+    
     const QRCodeExtraction = await readQRCode(qrCodeData);
     if (QRCodeExtraction) {
       saveInvoice(QRCodeExtraction);
@@ -127,7 +122,7 @@ function ScanScreen(props) {
       ShowToast("Erro ao extrair os dados da Nota.");
     }
   };
-
+  
   if (hasPermission === null) {
     return (
       <View
