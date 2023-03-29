@@ -72,7 +72,7 @@ function ScanScreen(props) {
       false
     ).then((item) => {
       if (item.length !== 0) {
-        Alert.alert("Nota Fiscal já existente", "QrCode cancelado");
+        Alert.alert("Nota Fiscal inválida", "QrCode já importado");
         navigation.navigate("Home");
       } else {
         addNfe(nfe);
