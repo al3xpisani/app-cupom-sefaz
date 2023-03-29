@@ -99,12 +99,14 @@ function ScanScreen(props) {
         }
       } catch (error) {
         ShowToast("Erro ao acessar servidor. O App fará mais tentativas.");
-        console.log(error);
       } finally {
         attempts++;
+        console.log('Attempts. Tentativas site webmania/sefaz : ', attempts);
       }
     }
-    throw new Error("Tentativas excedidas");
+    await SyncAlert("Alerta","Secretária da Fazenda não responde. Tente novamente.","OK")
+    setScanned(false);
+    return null;
   };
 
   const handleBarCodeScanned = async ({ type, data: qrCodeData }) => {
@@ -118,8 +120,6 @@ function ScanScreen(props) {
     const QRCodeExtraction = await readQRCode(qrCodeData);
     if (QRCodeExtraction) {
       saveInvoice(QRCodeExtraction);
-    } else {
-      ShowToast("Erro ao extrair os dados da Nota.");
     }
   };
   
