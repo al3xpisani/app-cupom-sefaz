@@ -51,9 +51,7 @@ export const fetchFirebaseLikeAt = async (
 
 export const addFirebaseDocument = async (documentEntity, collectionName) => {
         try {
-          const docRef = await addDoc(collection(db, collectionName), documentEntity);
-          console.log(`Documento inserido com sucesso`, docRef.id);
-          return docRef
+          return await addDoc(collection(db, collectionName), documentEntity);
         } catch (e) {
           console.error(`Erro ao adicionar ${documentEntity}`, e);
         }

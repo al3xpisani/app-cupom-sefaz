@@ -19,6 +19,7 @@
     "expo": "~48.0.6",
     "expo-barcode-scanner": "^12.3.2",
     "expo-blur": "^12.2.2",
+    "expo-camera": "~13.2.1",
     "expo-dev-client": "~2.1.6",
     "expo-status-bar": "~1.4.4",
     "firebase": "^9.18.0",
