@@ -33,7 +33,6 @@ const loginReducer = createSlice({
     initialState: initialState,
     reducers: {
       registerLoginActionFromSlice(state, action) {
-        console.log('insise slice.......................&&&&&&&&', state, action)
         return registerLogin(state, action)
       }
     },

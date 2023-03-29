@@ -32,15 +32,16 @@ function Login(props) {
   
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
-  // const { loggedUser } = useSelector((state)=> state.logins)
   const { login: {loggedUser} } = props
   const { registerLoginActions: {registerLoginActionFromSlice}, fetchTodoList: {fetchToDoListFromSlice}} = props
 
   useEffect(() => {
     registerLoginActionFromSlice(email.toLowerCase())
-    fetchToDoListFromSlice("alexxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+
+    //código abaixo serve de exemplo, isolando a api no redux
+    // fetchToDoListFromSlice("alexxxxxxxxxxxxxxxxxxxxxxxxxxxx")
   }, [email]);
-  console.log('props......... ', props)
+
   const handleCreateAccount = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {

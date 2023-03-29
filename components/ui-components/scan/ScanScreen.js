@@ -38,7 +38,7 @@ function ScanScreen(props) {
   }, []);
 
   const addNfe = async (nfe) => {
-    try {
+        try {
       addFirebaseDocument(nfe, "nota-fiscal").then(() => {
         navigation.navigate("Home");
       });
@@ -49,7 +49,7 @@ function ScanScreen(props) {
 
   const saveInvoice = (QRCodeExtraction) => {
     const invoiceValue = QRCodeExtraction;
-    console.log("888888888888888888888888888888 ", invoiceValue);
+
     let nfe = {};
     nfe.chave = invoiceValue.chave;
     nfe.consumidor = invoiceValue.consumidor;
@@ -84,7 +84,6 @@ function ScanScreen(props) {
 
     while (attempts < MAX_ATTEMPTS) {
       try {
-        console.log("attempts ...... ************* ", attempts);
         const response = await NfeAPI.post("consulta/qr-code/", {
           qrcode: qrCodeData,
           estado: "PE", //Modificar para tratar outros estados
@@ -93,18 +92,15 @@ function ScanScreen(props) {
         });
 
         if (response?.data.status !== "concluido") {
-          // console.log('xxxxxxxx aguardando..... ', response.data.status)
           await new Promise((resolve) => setTimeout(resolve, 300));
         } else {
-          await new Promise((resolve) => setTimeout(resolve, 300));
-          if (attempts === 9) return response?.data;
+          return response?.data;
         }
       } catch (error) {
         ShowToast("Erro ao acessar servidor. O App fará mais tentativas.");
         console.log(error);
       } finally {
         attempts++;
-        console.log(attempts);
       }
     }
     throw new Error("Tentativas excedidas");
@@ -114,8 +110,13 @@ function ScanScreen(props) {
     setScanned(true);
 
     if (qrCodeData.includes("sefaz") == false) {
-      alert("Este não é um documento fiscal válido!");
+      ShowToast("Este não é um documento fiscal válido!");
+      setScanned(false);
       return;
+    }
+    if(!qrCodeData.indexOf('nfce.sefaz.pe.gov.br/nfce-web')){
+      setScanned(false);
+      return
     }
 
     const QRCodeExtraction = await readQRCode(qrCodeData);
