@@ -67,7 +67,7 @@ function Login(props) {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{backgroundColor: '#14d864'}}>
         <ScrollView contentContainerStyle={styles.container}>
           <Image
             source={require("../../../assets/images/ic_ZQlogo.png")}

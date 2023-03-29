@@ -41,6 +41,7 @@ function ScanScreen(props) {
         try {
       addFirebaseDocument(nfe, "nota-fiscal").then(() => {
         navigation.navigate("Home");
+        Alert.alert("Nota Fiscal adicionada com sucesso");
       });
     } catch (e) {
       console.error("Falha ao adicionar a NFE: (ScanScreen) ", e);
