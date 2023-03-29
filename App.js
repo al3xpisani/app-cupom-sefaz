@@ -7,6 +7,7 @@ import { store } from "./store";
 import { AppRegistry } from "react-native";
 
 export default function App() {
+
   return (
     <Provider store={store}>
       <PaperProvider>
