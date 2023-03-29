@@ -30,7 +30,7 @@ const InvoiceItemDetail = ({ route }) => {
   };
 
   return (
-    <SafeAreaView>
+    <View>
       {updateAnimation && (
         <View style={{ height: "100%" }}>
           <View style={{ flex: 10 }}>
@@ -52,7 +52,7 @@ const InvoiceItemDetail = ({ route }) => {
           </View>
         </View>
       )}
-    </SafeAreaView>
+    </View>
   );
 };
 

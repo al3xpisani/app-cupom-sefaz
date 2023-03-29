@@ -13,6 +13,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import LoadSpinning from "../../loadspinning/LoadSpinning";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../../../config/firebase-config";
 import { useNavigation } from "@react-navigation/native";
@@ -27,6 +28,7 @@ function Login(props) {
   const [password, setPassword] = useState("");
   const [navigateToHome, setNavigateToHome] = useState(false);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
+  const [pressedLogin, setPressedLogin] = useState(false)
   
   const navigation = useNavigation();
   
@@ -55,6 +57,7 @@ function Login(props) {
   };
 
   const handleLogin = () => {
+    setPressedLogin(true)
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log("Logged In as ",loggedUser);
@@ -63,7 +66,10 @@ function Login(props) {
       .catch((error) => {
         console.log("Error ==>" + error);
         ShowToast("Usuário ou senha inválidos")
-      });
+      })
+      .finally(() => {
+        setPressedLogin(false)
+      })
   };
 
   return (
@@ -116,22 +122,26 @@ function Login(props) {
               }}
             >
               <Pressable
-                style={{
-                  backgroundColor: "#04b44c",
+                style={[pressedLogin ? styles.pressedLoginButton : styles.loginButton, {
                   height: 56,
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
                   borderRadius: 10,
                   width: 330,
-                }}
+                }]}
                 onPress={handleLogin}
               >
+                {pressedLogin && (
+                  <LoadSpinning spinSize={25}/>
+                )}
+                {(!pressedLogin &&
                 <Text
                   style={{ fontSize: 16, fontWeight: 700, color: "#ffffff" }}
                 >
                   LOGIN
                 </Text>
+                )}
               </Pressable>
 
               <Pressable
@@ -197,6 +207,12 @@ const styles = StyleSheet.create({
     display: "flex",
     gap: 15,
   },
+  pressedLoginButton: {
+    backgroundColor: '#14d864'
+  },
+  loginButton: {
+    backgroundColor: "#04b44c",
+  }
 });
 
 const mapStateToProps = function(state) {
