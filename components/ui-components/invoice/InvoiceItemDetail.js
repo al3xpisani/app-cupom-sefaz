@@ -16,11 +16,25 @@ const InvoiceItemDetail = ({ route }) => {
   }, [isFocused]);
 
   const { details } = route.params;
+
+  // const products = details.produtos || [];
+  // const { endereco, numero, bairro, cidade, uf } = details.emitente;
+  // const address = `${endereco}, ${numero}, ${bairro} - ${cidade} ${uf || ""}`;
+  // const elipsizeTextMain = ElipsizeText(details.emitente.razao_social, 37);
+  // const elipsizeTextsubTitle = ElipsizeText(details.emitente.razao_social, 25);
+  // const invoiceItens = {
+  //   address,
+  //   products,
+  //   elipsizeTextMain,
+  //   elipsizeTextsubTitle,
+  //   details,
+  // };
+
   const products = details.produtos || [];
-  const { endereco, numero, bairro, cidade, uf } = details.emitente;
+  const { xLgr: endereco, nro: numero, xBairro: bairro, xMun: cidade, UF: uf } = details.emitente.enderEmit;
   const address = `${endereco}, ${numero}, ${bairro} - ${cidade} ${uf || ""}`;
-  const elipsizeTextMain = ElipsizeText(details.emitente.razao_social, 37);
-  const elipsizeTextsubTitle = ElipsizeText(details.emitente.razao_social, 25);
+  const elipsizeTextMain = ElipsizeText(details.emitente.xNome, 37);
+  const elipsizeTextsubTitle = ElipsizeText(details.emitente.xNome, 25);
   const invoiceItens = {
     address,
     products,

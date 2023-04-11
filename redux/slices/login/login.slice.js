@@ -32,7 +32,7 @@ const loginReducer = createSlice({
     name: 'login',
     initialState: initialState,
     reducers: {
-      registerLoginActionFromSlice(state, action) {
+      registerLoggedUserAction(state, action) {
         return registerLogin(state, action)
       }
     },
@@ -44,4 +44,4 @@ const loginReducer = createSlice({
   })
 
 export default loginReducer.reducer
-export const { registerLoginActionFromSlice } = loginReducer.actions
+export const { registerLoggedUserAction } = loginReducer.actions

@@ -21,7 +21,7 @@ import { TextInput } from "react-native-paper";
 import { ShowToast } from "../../helpers/ShowToast";
 import { useSelector, useDispatch, connect } from 'react-redux'
 import { bindActionCreators} from '@reduxjs/toolkit'
-import { registerLoginActionFromSlice, fetchToDoListFromSlice } from "../../../redux/slices/login/loginSlice";
+import { registerLoggedUserAction, fetchToDoListFromSlice } from "../../../redux/slices/login/login.slice";
 
 function Login(props) {
   const [email, setEmail] = useState("");
@@ -35,10 +35,10 @@ function Login(props) {
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const { login: {loggedUser} } = props
-  const { registerLoginActions: {registerLoginActionFromSlice}, fetchTodoList: {fetchToDoListFromSlice}} = props
+  const { registerLoginActions: {registerLoggedUserAction}, fetchTodoList: {fetchToDoListFromSlice}} = props
 
   useEffect(() => {
-    registerLoginActionFromSlice(email.toLowerCase())
+    registerLoggedUserAction(email.toLowerCase())
 
     //código abaixo serve de exemplo, isolando a api no redux
     // fetchToDoListFromSlice("alexxxxxxxxxxxxxxxxxxxxxxxxxxxx")
@@ -73,8 +73,8 @@ function Login(props) {
   };
 
   return (
-    <SafeAreaView style={{backgroundColor: '#14d864'}}>
-        <ScrollView contentContainerStyle={styles.container}>
+    <SafeAreaView style={styles.container}>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
           <Image
             source={require("../../../assets/images/ic_ZQlogo.png")}
             style={{ width: 50, height: 50 }}
@@ -170,7 +170,7 @@ function Login(props) {
               alignItems: "center",
               justifyContent: "center",
               marginTop: "auto",
-              marginBottom: 10,
+              marginBottom: 15,
             }}
           >
             <Text
@@ -193,6 +193,13 @@ function Login(props) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#14d864",
+    alignItems: "center",
+    height: "100%",
+    minHeight: 700,
+    gap: 20,
+    paddingTop: 60,
+  },
+  scrollContainer: {
     alignItems: "center",
     height: "100%",
     minHeight: 700,
@@ -223,7 +230,7 @@ const mapStateToProps = function(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    registerLoginActions : bindActionCreators({registerLoginActionFromSlice}, dispatch),
+    registerLoginActions : bindActionCreators({registerLoggedUserAction}, dispatch),
     fetchTodoList: bindActionCreators({fetchToDoListFromSlice}, dispatch)
   }
 }

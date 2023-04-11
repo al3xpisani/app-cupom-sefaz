@@ -1,19 +1,26 @@
 import React, { useEffect } from "react";
 import { Image, Text, View, VirtualizedList } from "react-native";
+import { TimeStampISOStringFormat } from '../../../utils/TimeStamp'
+import { ElipsizeText } from "../../../utils/ElipsizeText";
 
 const InvoiceItemBodyDetail = ({invoiceItens}) => {
 
     const getItem = (_data, index) => {
       if (index in _data) {
-        const product = _data[index];
+        const {prod: {cProd: codProdNF}} = _data[index];
+        const {prod: {xProd: descProdNF}} = _data[index];
+        const {prod: {qTrib: qtdeItemNF}} = _data[index];
+        const {prod: {vUnTrib: subTotal}} = _data[index];
+        const {prod: {vProd: vlTotalProduto}} = _data[index];
+        const {prod: {uTrib: undItemNF}} = _data[index];
         return {
           key: `${index}`,
-          item: product.item,
-          nome: product.nome,
-          quantidade: product.quantidade,
-          subtotal: product.subtotal,
-          total: product.total,
-          unidade: product.unidade,
+          item: codProdNF,
+          nome: descProdNF,
+          quantidade: qtdeItemNF,
+          subtotal: subTotal,
+          total: vlTotalProduto,
+          unidade: undItemNF,
         };
       }
     };
@@ -36,13 +43,16 @@ const InvoiceItemBodyDetail = ({invoiceItens}) => {
   
     const renderItem = ({ item, index }) => {
       return (
-        <View style={{ padding: 10 }}>
+        <View style={{ padding: 10, flexDirection: "row", alignItems: "center", justifyContent: "space-between"}}>
           <View style={{ flexDirection: "column" }}>
-            <Text style={{ fontSize: 14 }}>Descrição</Text>
+            <Text style={{ fontSize: 14 }}>{ElipsizeText(item.nome,25)}</Text>
             <Text style={{ fontSize: 14 }}>
-              {item.quantidade} {item.nome}
+              {item.quantidade} {item.unidade} X {item.subtotal}
             </Text>
           </View>
+            <Text>
+              R$ {item.total}
+            </Text>
         </View>
       );
     };
@@ -110,7 +120,7 @@ const InvoiceItemBodyDetail = ({invoiceItens}) => {
             }}
           >
             <Text style={{ fontSize: 16, fontWeight: 300 }}>COMPRA</Text>
-            <Text style={{ fontWeight: 700 }}>{invoiceItens.details.data_emissao}</Text>
+            <Text style={{ fontWeight: 700 }}>{TimeStampISOStringFormat(invoiceItens.details.data_emissao)}</Text>
           </View>
 
           <VirtualizedList

@@ -31,7 +31,11 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.apa.cesar.zeq"
+      "package": "com.apa.cesar.zeq",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -40,6 +44,12 @@
       "eas": {
         "projectId": "6c2cedf5-a31e-4e11-b3dd-2bf875184f78"
       }
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/6c2cedf5-a31e-4e11-b3dd-2bf875184f78"
     }
   }
 }

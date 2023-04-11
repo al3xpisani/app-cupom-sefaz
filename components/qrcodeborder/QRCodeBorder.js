@@ -10,7 +10,7 @@ export const QRCodeBorder = ({color,
     children
  }) => {
     return (
-      <View style={{ height: size, width: size }}>
+        <View width={size} height={size} style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
         {children}
         <View
           style={{
@@ -22,7 +22,8 @@ export const QRCodeBorder = ({color,
             borderColor: color,
             borderTopWidth: thickness,
             borderLeftWidth: thickness,
-            borderTopLeftRadius: borderRadius,
+            // bug no android 
+            // borderTopLeftRadius: borderRadius,
           }}
         ></View>
         <View
@@ -35,7 +36,7 @@ export const QRCodeBorder = ({color,
             borderColor: color,
             borderTopWidth: thickness,
             borderRightWidth: thickness,
-            borderTopRightRadius: borderRadius,
+            // borderTopRightRadius: borderRadius,
           }}
         ></View>
         <View
@@ -48,7 +49,7 @@ export const QRCodeBorder = ({color,
             borderColor: color,
             borderBottomWidth: thickness,
             borderLeftWidth: thickness,
-            borderBottomLeftRadius: borderRadius,
+            // borderBottomLeftRadius: borderRadius,
           }}
         ></View>
         <View
@@ -61,7 +62,7 @@ export const QRCodeBorder = ({color,
             borderColor: color,
             borderBottomWidth: thickness,
             borderRightWidth: thickness,
-            borderBottomRightRadius: borderRadius,
+            // borderBottomRightRadius: borderRadius,
           }}
         ></View>
       </View>

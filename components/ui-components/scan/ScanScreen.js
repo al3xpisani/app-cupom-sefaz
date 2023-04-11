@@ -7,7 +7,9 @@ import {
   Alert,
   Image,
   useWindowDimensions,
+  TouchableOpacity,
 } from "react-native";
+import axios from "axios";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useNavigation } from "@react-navigation/native";
 import NfeAPI from "../../../services/NFeAPI";
@@ -15,12 +17,16 @@ import { connect } from "react-redux";
 import fetchFirebaseDataMatch, {
   addFirebaseDocument,
 } from "../../../config/fetchFirebaseData";
-import ShowToast from "../../helpers/ShowToast";
 import LoadSpinning from "../../loadspinning/LoadSpinning";
 import { QRCodeBorder } from "../../qrcodeborder/QRCodeBorder";
 import { SyncAlert } from "../../syncalert/SyncAlert";
+import { fetchSefazPE } from "./fetchSefazPE";
+import { fetchSefazBA } from "./fetchSefazBA";
+import { fetchSefazCE } from "./fetchSefazCE";
 
 const MAX_ATTEMPTS = 10;
+const UFS = ['.pe.','.ba.','.ce.']
+const CE = "23"
 
 function ScanScreen(props) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -38,7 +44,7 @@ function ScanScreen(props) {
   }, []);
 
   const addNfe = async (nfe) => {
-        try {
+    try {
       addFirebaseDocument(nfe, "nota-fiscal").then(() => {
         navigation.navigate("Home");
         Alert.alert("Nota Fiscal adicionada com sucesso");
@@ -48,22 +54,7 @@ function ScanScreen(props) {
     }
   };
 
-  const saveInvoice = (QRCodeExtraction) => {
-    const invoiceValue = QRCodeExtraction;
-
-    let nfe = {};
-    nfe.chave = invoiceValue.chave;
-    nfe.consumidor = invoiceValue.consumidor;
-    nfe.email = loggedUser;
-    nfe.data_emissao = invoiceValue.data_emissao;
-    nfe.protocolo = invoiceValue.protocolo;
-    nfe.numero = invoiceValue.numero;
-    nfe.serie = invoiceValue.serie;
-    nfe.total = invoiceValue.total;
-    nfe.emitente = invoiceValue.emitente;
-    nfe.produtos = invoiceValue.produtos;
-    nfe.status = invoiceValue.status;
-    nfe.razao_social = invoiceValue.emitente.razao_social;
+  const saveInvoice = (nfe) => {
     fetchFirebaseDataMatch(
       "nota-fiscal",
       "chave",
@@ -80,49 +71,66 @@ function ScanScreen(props) {
     });
   };
 
-  const readQRCode = async (qrCodeData) => {
-    let attempts = 0;
-
-    while (attempts < MAX_ATTEMPTS) {
-      try {
-        const response = await NfeAPI.post("consulta/qr-code/", {
-          qrcode: qrCodeData,
-          estado: "PE", //Modificar para tratar outros estados
-          assincrono: true,
-          url_notificacao: "https://cesar.org.br",
-        });
-
-        if (response?.data.status !== "concluido") {
-          await new Promise((resolve) => setTimeout(resolve, 300));
-        } else {
-          return response?.data;
-        }
-      } catch (error) {
-        ShowToast("Erro ao acessar servidor. O App fará mais tentativas.");
-      } finally {
-        attempts++;
-        console.log('Attempts. Tentativas site webmania/sefaz : ', attempts);
-      }
+  const readQRCode = async (qrCodeData, sefazUF) => {
+    let result
+    if(sefazUF === UFS[0]){
+      result = await fetchSefazPE(qrCodeData,10, loggedUser)
+    } else if(sefazUF === UFS[1]){
+      result = await fetchSefazBA(qrCodeData, loggedUser)
+    } else if(sefazUF === UFS[2]){
+      result = await fetchSefazCE(qrCodeData,10, loggedUser)
     }
-    await SyncAlert("Alerta","Secretária da Fazenda não responde. Tente novamente.","OK")
     setScanned(false);
-    return null;
+    return result
+
   };
 
+  const redirectSefazURL = (qrCodeData) => {
+    return UFS.filter((item, index) => {
+      if(qrCodeData.indexOf(item) !== -1){
+        return item
+      }
+    })
+  }
+
+  const isSefazCeara = (qrCodeData) => {
+    return String(qrCodeData).substring(0,2) === CE
+  }
+
   const handleBarCodeScanned = async ({ type, data: qrCodeData }) => {
+    let QrCodeHasOnlyNumbers = RegExp("^[0-9]*$");
     setScanned(true);
-    if (qrCodeData.includes("sefaz") == false && qrCodeData.indexOf('nfce.sefaz.pe.gov.br/nfce-web') === -1) {
-      await SyncAlert("Aviso","Este não é um documento fiscal válido!","OK")
-      setScanned(false)
+    console.log("qrcode .....: ", qrCodeData);
+
+    if (qrCodeData.match(QrCodeHasOnlyNumbers)) {
+      setScanned(false);
+      console.log("QRCode Invalid. It contains only numbers ", qrCodeData);
       return;
     }
-    
-    const QRCodeExtraction = await readQRCode(qrCodeData);
+    if (qrCodeData.includes("sefaz") == false) {
+      if(isSefazCeara(qrCodeData)){
+        qrCodeData = qrCodeData.substring(0,44)
+      } else {
+      await SyncAlert("Aviso", "Este não é um documento fiscal válido!", "OK");
+      setScanned(false);
+      return;}
+    }
+
+    const sefazUF = redirectSefazURL(qrCodeData)
+    if(sefazUF.length === 0 & !isSefazCeara(qrCodeData)){
+      await SyncAlert("Aviso", "UF não encontrada no QRcode.", "OK");
+      setScanned(false);
+      return;
+    }
+    console.log('uf............ ', sefazUF, qrCodeData)
+
+    const QRCodeExtraction = await readQRCode(qrCodeData, isSefazCeara(qrCodeData) ? UFS[2] : sefazUF[0]);
+    console.log('entrou .... ', QRCodeExtraction)
     if (QRCodeExtraction) {
       saveInvoice(QRCodeExtraction);
     }
   };
-  
+
   if (hasPermission === null) {
     return (
       <View
@@ -157,33 +165,40 @@ function ScanScreen(props) {
   return (
     <View style={styles.container}>
       <View>
+        <TouchableOpacity
+          title={"Ler QRCode"}
+          onPress={() => setScanned(false)}
+          style={{}}
+        >
+          <Text
+            style={{ textAlign: "center", color: "#ffffff", paddingBottom: 10 }}
+          >
+            Ler QRCode
+          </Text>
+        </TouchableOpacity>
         <QRCodeBorder
           color="#04b44c"
-          size={width * 0.7}
-          borderLength={"20%"}
-          thickness={8}
-          borderRadius={0}
+          size={300}
+          borderLength={"15%"}
+          thickness={4}
+          borderRadius={1}
         >
           {!scanned && (
             <BarCodeScanner
               onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-              style={{
-                width: width * 0.7,
-                height: width * 0.7,
-              }}
-            >
-              <Button
-                color={"black"}
-                title={"Ler QRCode"}
-                onPress={() => setScanned(false)}
-              />
-            </BarCodeScanner>
+              style={[
+                {
+                  width: 300,
+                  height: 300,
+                },
+              ]}
+            />
           )}
           {scanned && (
             <View
               style={{
-                width: width * 0.7,
-                height: width * 0.7,
+                width: 300,
+                height: 300,
               }}
             >
               <LoadSpinning />

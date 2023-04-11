@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import {
   Image,
   Text,
@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
 import LoadSpinning from "../../loadspinning/LoadSpinning";
-import { TimeStampStringFormat } from "../../../utils/TimeStamp";
+import { TimeStampStringFormat, TimeStampISOStringFormat } from "../../../utils/TimeStamp";
 import { ElipsizeText } from "../../../utils/ElipsizeText";
 import fetchFirebaseDataMatch, {
   fetchFirebaseLikeAt,
@@ -54,7 +54,7 @@ function ListInvoices(props) {
       "nota-fiscal",
       "email",
       loggedUser,
-      "emitente.razao_social",
+      "emitente.xNome",
       String(searchText).toUpperCase()
     ).then((item) => {
       setIsLoading(false);
@@ -89,16 +89,33 @@ function ListInvoices(props) {
     });
   };
 
+  // const getItem = (_data, index) => {
+  //   if (index in _data) {
+  //     return {
+  //       key: `${index}`,
+  //       id: _data[index].id,
+  //       title: _data[index].emitente.razao_social,
+  //       creation_timestamp: String(
+  //         TimeStampStringFormat(_data[index].data_emissao)
+  //       ),
+  //       valor_nota: `R$ ${_data[index].total}`,
+  //       details: _data[index],
+  //     };
+  //   }
+  // };
+
   const getItem = (_data, index) => {
     if (index in _data) {
+      let {xNome: razao_social} = _data[index].emitente
+      let {total: VlTotalNFComDesconto} = _data[index]
       return {
         key: `${index}`,
         id: _data[index].id,
-        title: _data[index].emitente.razao_social,
+        title: razao_social,
         creation_timestamp: String(
-          TimeStampStringFormat(_data[index].data_emissao)
+          TimeStampISOStringFormat(_data[index].data_emissao)
         ),
-        valor_nota: `R$ ${_data[index].total}`,
+        valor_nota: `R$ ${VlTotalNFComDesconto}`,
         details: _data[index],
       };
     }
@@ -108,7 +125,7 @@ function ListInvoices(props) {
   };
   const getItemCount = (_data) => invoices?.length;
 
-  const renderItem = ({ item, index }) => {
+  const renderItem = useMemo(() => ({ item, index }) => {
     const ellipsisTitle = ElipsizeText(item?.title, 20);
     return (
       <TouchableOpacity onPress={() => handleItemOnPress(item)}>
@@ -127,7 +144,7 @@ function ListInvoices(props) {
         </View>
       </TouchableOpacity>
     );
-  };
+  });
 
   const ItemSeparator = () => {
     if (invoices) {
