@@ -9,10 +9,8 @@ import {
   useWindowDimensions,
   TouchableOpacity,
 } from "react-native";
-import axios from "axios";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useNavigation } from "@react-navigation/native";
-import NfeAPI from "../../../services/NFeAPI";
 import { connect } from "react-redux";
 import fetchFirebaseDataMatch, {
   addFirebaseDocument,
@@ -24,9 +22,8 @@ import { fetchSefazPE } from "./fetchSefazPE";
 import { fetchSefazBA } from "./fetchSefazBA";
 import { fetchSefazCE } from "./fetchSefazCE";
 
-const MAX_ATTEMPTS = 10;
-const UFS = ['.pe.','.ba.','.ce.']
-const CE = "23"
+const UFS = [".pe.", ".ba.", ".ce."];
+const CE = "23";
 
 function ScanScreen(props) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -72,30 +69,29 @@ function ScanScreen(props) {
   };
 
   const readQRCode = async (qrCodeData, sefazUF) => {
-    let result
-    if(sefazUF === UFS[0]){
-      result = await fetchSefazPE(qrCodeData,10, loggedUser)
-    } else if(sefazUF === UFS[1]){
-      result = await fetchSefazBA(qrCodeData, loggedUser)
-    } else if(sefazUF === UFS[2]){
-      result = await fetchSefazCE(qrCodeData,10, loggedUser)
+    let result;
+    if (sefazUF === UFS[0]) {
+      result = await fetchSefazPE(qrCodeData, 10, loggedUser);
+    } else if (sefazUF === UFS[1]) {
+      result = await fetchSefazBA(qrCodeData, 10, loggedUser);
+    } else if (sefazUF === UFS[2]) {
+      result = await fetchSefazCE(qrCodeData, 10, loggedUser);
     }
     setScanned(false);
-    return result
-
+    return result;
   };
 
   const redirectSefazURL = (qrCodeData) => {
     return UFS.filter((item, index) => {
-      if(qrCodeData.indexOf(item) !== -1){
-        return item
+      if (qrCodeData.indexOf(item) !== -1) {
+        return item;
       }
-    })
-  }
+    });
+  };
 
   const isSefazCeara = (qrCodeData) => {
-    return String(qrCodeData).substring(0,2) === CE
-  }
+    return String(qrCodeData).substring(0, 2) === CE;
+  };
 
   const handleBarCodeScanned = async ({ type, data: qrCodeData }) => {
     let QrCodeHasOnlyNumbers = RegExp("^[0-9]*$");
@@ -108,30 +104,38 @@ function ScanScreen(props) {
       return;
     }
     if (qrCodeData.includes("sefaz") == false) {
-      if(isSefazCeara(qrCodeData)){
-        qrCodeData = qrCodeData.substring(0,44)
+      if (isSefazCeara(qrCodeData)) {
+        qrCodeData = qrCodeData.substring(0, 44);
       } else {
-      await SyncAlert("Aviso", "Este não é um documento fiscal válido!", "OK");
-      setScanned(false);
-      return;}
+        await SyncAlert(
+          "Aviso",
+          "Este não é um documento fiscal válido!",
+          "OK"
+        );
+        setScanned(false);
+        return;
+      }
     }
 
-    const sefazUF = redirectSefazURL(qrCodeData)
-    if(sefazUF.length === 0 & !isSefazCeara(qrCodeData)){
+    const sefazUF = redirectSefazURL(qrCodeData);
+    if ((sefazUF.length === 0) & !isSefazCeara(qrCodeData)) {
       await SyncAlert("Aviso", "UF não encontrada no QRcode.", "OK");
       setScanned(false);
       return;
     }
-    console.log('uf............ ', sefazUF, qrCodeData)
 
-    const QRCodeExtraction = await readQRCode(qrCodeData, isSefazCeara(qrCodeData) ? UFS[2] : sefazUF[0]);
-    console.log('entrou .... ', QRCodeExtraction)
+    const QRCodeExtraction = await readQRCode(
+      qrCodeData,
+      isSefazCeara(qrCodeData) ? UFS[2] : sefazUF[0]
+    );
+    console.log("entrou .... ", QRCodeExtraction);
     if (QRCodeExtraction) {
       saveInvoice(QRCodeExtraction);
     }
   };
 
   if (hasPermission === null) {
+    console.log('Solicitando novamente acesso a camera.................................')
     return (
       <View
         style={{

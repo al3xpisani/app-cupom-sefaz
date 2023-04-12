@@ -5,7 +5,7 @@ import { convertSefazPEResponse } from './convertSefazResponse'
 import { SyncAlert } from "../../syncalert/SyncAlert";
 
 export const fetchSefazPE = async (qrCodeData,MAX_ATTEMPTS=10, loggedUser) => {
-let attempts = 9;
+let attempts = 0;
 
     while (attempts < MAX_ATTEMPTS) {
       try {

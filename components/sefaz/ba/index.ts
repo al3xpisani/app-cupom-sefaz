@@ -18,7 +18,6 @@ export default class ConsultaBA {
     params = {},
     match: any[];
     while (match = regex.exec(url)) {
-      console.log('matchh........................ ', match)
       params[match[1]] = match[2];
   }
   return params["p"].split('|')
@@ -26,16 +25,6 @@ export default class ConsultaBA {
 
 constructor(qrCodeURL: string) {
   const chaveNFe = this.extractURLParam(qrCodeURL)
-  // if (chaveNFe.length === 0) throw new Error('Não foi possível detectar a chave do parâmetro');
-  // console.log('params.... ', chaveNFe)
-
-    // this.axiosConfig.data = {
-    //   chave_acesso: chaveNFe[0],
-    //   versao_qrcode: chaveNFe[1],
-    //   tipo_ambiente: chaveNFe[2],
-    //   identificador_csc: chaveNFe[3],
-    //   codigo_hash: chaveNFe[4],
-    // };
     this.axiosConfig.params.HML = false;
     this.axiosConfig.url = qrCodeURL;
     this.chave = chaveNFe[0]
@@ -89,7 +78,6 @@ constructor(qrCodeURL: string) {
     if(String(labelDesconto).toLowerCase().search('desconto') !== -1){
       descontoTotal = $('div:nth-of-type(3) > span', scopeTotalNota)[0].children[0].data;
       descontoTotal = descontoTotal.split('.').join('').replace(',', '.')
-      console.log('$$$$$$$$$$$ desconto ', $('div:nth-of-type(3) > span', scopeTotalNota)[0].children[0].data)
     }
     return {
       dataEmissao,
@@ -165,7 +153,7 @@ constructor(qrCodeURL: string) {
         codigo,
         NCM: null,
         eanComercial: null,
-        vlTotal: vlTotal,
+        vlTotal: vlTotal.split('.').join('').replace(',', '.'),
       });
     }
     return lista.map(
@@ -207,7 +195,6 @@ constructor(qrCodeURL: string) {
   private fetchData(): any {
     return axios(this.axiosConfig)
                   .then(res => {
-                    console.log('res axios...... ', res.data)
                     return res.data})
                   .catch(() => {
                     throw new Error(

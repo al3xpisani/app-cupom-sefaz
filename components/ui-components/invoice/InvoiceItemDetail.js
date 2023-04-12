@@ -17,23 +17,16 @@ const InvoiceItemDetail = ({ route }) => {
 
   const { details } = route.params;
 
-  // const products = details.produtos || [];
-  // const { endereco, numero, bairro, cidade, uf } = details.emitente;
-  // const address = `${endereco}, ${numero}, ${bairro} - ${cidade} ${uf || ""}`;
-  // const elipsizeTextMain = ElipsizeText(details.emitente.razao_social, 37);
-  // const elipsizeTextsubTitle = ElipsizeText(details.emitente.razao_social, 25);
-  // const invoiceItens = {
-  //   address,
-  //   products,
-  //   elipsizeTextMain,
-  //   elipsizeTextsubTitle,
-  //   details,
-  // };
-
   const products = details.produtos || [];
-  const { xLgr: endereco, nro: numero, xBairro: bairro, xMun: cidade, UF: uf } = details.emitente.enderEmit;
+  const {
+    xLgr: endereco,
+    nro: numero,
+    xBairro: bairro,
+    xMun: cidade,
+    UF: uf,
+  } = details.emitente.enderEmit;
   const address = `${endereco}, ${numero}, ${bairro} - ${cidade} ${uf || ""}`;
-  const elipsizeTextMain = ElipsizeText(details.emitente.xNome, 37);
+  const elipsizeTextMain = ElipsizeText(details.emitente.xNome, 22);
   const elipsizeTextsubTitle = ElipsizeText(details.emitente.xNome, 25);
   const invoiceItens = {
     address,
@@ -52,17 +45,34 @@ const InvoiceItemDetail = ({ route }) => {
           </View>
           <View
             style={{
-              alignItems: "flex-end",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
               flex: 1,
               padding: 20,
               borderWidth: 1,
               backgroundColor: "#540d6e",
             }}
           >
-            <Text style={{ fontSize: 18, color: "#ffffff" }}>VALOR TOTAL</Text>
-            <Text style={{ fontSize: 21, fontWeight: 700, color: "#ffffff" }}>
-              R$ {details.total}
-            </Text>
+            <View alignItems="center">
+              <Text style={{ fontSize: 18, color: "#ffffff" }}>
+                DESCONTO
+              </Text>
+              <Text style={{ fontSize: 21, fontWeight: 700, color: "#ffffff" }}>
+                R${" "}
+                {Number(
+                  Number(details.totalSemDesconto) - Number(details.total)
+                ).toFixed(2)}
+              </Text>
+            </View>
+            <View alignItems="center">
+              <Text style={{ fontSize: 18, color: "#ffffff" }}>
+                VALOR TOTAL
+              </Text>
+              <Text style={{ fontSize: 21, fontWeight: 700, color: "#ffffff" }}>
+                R$ {Number(Number(details.total)).toFixed(2)}
+              </Text>
+            </View>
           </View>
         </View>
       )}

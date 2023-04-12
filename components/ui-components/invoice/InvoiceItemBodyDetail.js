@@ -51,7 +51,7 @@ const InvoiceItemBodyDetail = ({invoiceItens}) => {
             </Text>
           </View>
             <Text>
-              R$ {item.total}
+              R$ {Number(item.total).toFixed(2)}
             </Text>
         </View>
       );
@@ -59,7 +59,7 @@ const InvoiceItemBodyDetail = ({invoiceItens}) => {
     return (
       <View>
         <View style={{ padding: 20 }}>
-          <Text style={{ marginBottom: 10, fontSize: 16, fontWeight: 300 }}>
+          <Text style={{ marginBottom: 10, fontSize: 16, fontWeight: 600, color: "#540d6e" }} >
             EMISSOR
           </Text>
 
@@ -93,7 +93,7 @@ const InvoiceItemBodyDetail = ({invoiceItens}) => {
         />
 
         <View style={{ padding: 20 }}>
-          <Text style={{ fontSize: 16, fontWeight: 300, marginBottom: 10 }}>
+          <Text style={{ fontSize: 16, fontWeight: 600, marginBottom: 10, color: "#540d6e" }}>
             CONSUMIDOR
           </Text>
           <Text>Nome</Text>
@@ -119,7 +119,7 @@ const InvoiceItemBodyDetail = ({invoiceItens}) => {
               marginBottom: 10,
             }}
           >
-            <Text style={{ fontSize: 16, fontWeight: 300 }}>COMPRA</Text>
+            <Text style={{ fontSize: 16, fontWeight: 600, color: "#540d6e" }}>COMPRA</Text>
             <Text style={{ fontWeight: 700 }}>{TimeStampISOStringFormat(invoiceItens.details.data_emissao)}</Text>
           </View>
 

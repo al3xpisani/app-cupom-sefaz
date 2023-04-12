@@ -89,21 +89,6 @@ function ListInvoices(props) {
     });
   };
 
-  // const getItem = (_data, index) => {
-  //   if (index in _data) {
-  //     return {
-  //       key: `${index}`,
-  //       id: _data[index].id,
-  //       title: _data[index].emitente.razao_social,
-  //       creation_timestamp: String(
-  //         TimeStampStringFormat(_data[index].data_emissao)
-  //       ),
-  //       valor_nota: `R$ ${_data[index].total}`,
-  //       details: _data[index],
-  //     };
-  //   }
-  // };
-
   const getItem = (_data, index) => {
     if (index in _data) {
       let {xNome: razao_social} = _data[index].emitente

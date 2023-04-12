@@ -1,4 +1,3 @@
-import { XMLParser } from "fast-xml-parser";
 import ShowToast from "../../helpers/ShowToast";
 import { convertSefazCEResponse } from "./convertSefazResponse";
 import { SyncAlert } from "../../syncalert/SyncAlert";
@@ -8,7 +7,7 @@ export const fetchSefazCE = async (
   MAX_ATTEMPTS = 10,
   loggedUser
 ) => {
-  let attempts = 9;
+  let attempts = 0;
 
   while (attempts < MAX_ATTEMPTS) {
     try {
