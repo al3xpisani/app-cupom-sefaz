@@ -6,6 +6,7 @@ import Login from "../login/Login";
 import Home from "../home/Home";
 import ScanScreen from "../scan/ScanScreen";
 import InvoiceItemDetail from "../invoice/InvoiceItemDetail";
+import { Button } from 'cesar-hub'
 
 const Stack = createNativeStackNavigator();
 
@@ -34,6 +35,12 @@ function StackNavigator() {
           name="InvoiceDetail"
           component={InvoiceItemDetail}
           options={navigationOptions("Espelho nota", "#ffffff", "#540d6e")}
+          screenOptions={screenOptions}
+        />
+        <Stack.Screen
+          name="ZeqHub"
+          component={Button}
+          options={navigationOptions("Zeq Hub", "#ffffff", "#540d6e")}
           screenOptions={screenOptions}
         />
       </Stack.Navigator>

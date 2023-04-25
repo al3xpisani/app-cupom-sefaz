@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
+// import {Button} from 'cesar-hub'
 import {
   Image,
   Text,
@@ -81,10 +82,10 @@ function Login(props) {
           />
           <Text>
             <Text style={{ fontSize: 22, fontWeight: 800, color: "#540d6e" }}>
-              ZeQ -{" "}
+              Smart
             </Text>
             <Text style={{ fontSize: 22, fontWeight: 400, color: "#540d6e" }}>
-              Zero Queue
+            {" "} Shopping
             </Text>
           </Text>
           <View style={styles.login}>
@@ -154,7 +155,7 @@ function Login(props) {
                   borderRadius: 10,
                   width: 330,
                 }}
-                onPress={handleCreateAccount}
+                onPress={()=> navigation.navigate("ZeqHub")}
               >
                 <Text
                   style={{ fontSize: 16, fontWeight: 700, color: "#ffffff" }}
@@ -162,6 +163,7 @@ function Login(props) {
                   CRIAR CONTA
                 </Text>
               </Pressable>
+              {/* <Button label={"Create account z"}/> */}
             </View>
           </View>
           <View
