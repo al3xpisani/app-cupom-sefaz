@@ -8380,6 +8380,11 @@ react-native-size-matters@^0.3.1:
   resolved "https://registry.npmjs.org/react-native-size-matters/-/react-native-size-matters-0.3.1.tgz#24d0cfc335a2c730f6d58bd7b43ea5a41be4b49f"
   integrity sha512-mKOfBLIBFBcs9br1rlZDvxD5+mAl8Gfr5CounwJtxI6Z82rGrMO+Kgl9EIg3RMVf3G855a85YVqHJL2f5EDRlw==
 
+react-native-tesseract-ocr@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.npmjs.org/react-native-tesseract-ocr/-/react-native-tesseract-ocr-2.0.3.tgz#a8145344922e0d74ef9d9645ddc715481cd6e1cc"
+  integrity sha512-GD1pKVD+BwfAs/o6FvdKIecOJHamMx/WIdxZxdGB2/tRiIy1uFukptvii7XS5HC7gAiFvMTKFu05DX/LTdWwWw==
+
 react-native-vector-icons@^9.2.0:
   version "9.2.0"
   resolved "https://registry.npmjs.org/react-native-vector-icons/-/react-native-vector-icons-9.2.0.tgz#3c0c82e95defd274d56363cbe8fead8d53167ebd"
