@@ -14,8 +14,6 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import TesseractOcr, { LANG_ENGLISH,
-  useEventListener, } from 'react-native-tesseract-ocr';
 import LoadSpinning from "../../loadspinning/LoadSpinning";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../../../config/firebase-config";
@@ -32,10 +30,6 @@ function Login(props) {
   const [navigateToHome, setNavigateToHome] = useState(false);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [pressedLogin, setPressedLogin] = useState(false);
-  const [ocr, setOcr] = useState('Recognizing...');
-  useEventListener('onProgressChange', (p) => {
-    console.log('progress ocr ..... ', p)
-  });
   
   const navigation = useNavigation();
   
@@ -63,13 +57,6 @@ function Login(props) {
       });
   };
 
-  const getOCR = async () => {
-    const tesseractOptions = {};
-    const reconText = await TesseractOcr.recognize("https://tesseract.projectnaptha.com/img/eng_bw.png", LANG_ENGLISH, tesseractOptions);
-    setOcr(reconText)
-    console.log('recon text.... ', reconText)
-  };
-
   const handleLogin = () => {
     setPressedLogin(true)
     signInWithEmailAndPassword(auth, email, password)
@@ -89,7 +76,6 @@ function Login(props) {
   return (
     <SafeAreaView style={styles.container}>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <Text>{ocr}</Text>
           <Image
             source={require("../../../assets/images/ic_ZQlogo.png")}
             style={{ width: 50, height: 50 }}
@@ -178,25 +164,6 @@ function Login(props) {
                 </Text>
               </Pressable>
               {/* <Button label={"Create account z"}/> */}
-
-              <Pressable
-                style={{
-                  backgroundColor: "#6792F098",
-                  height: 56,
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  borderRadius: 10,
-                  width: 330,
-                }}
-                onPress={()=> getOCR()}
-              >
-                <Text
-                  style={{ fontSize: 16, fontWeight: 700, color: "#ffffff" }}
-                >
-                  OCR
-                </Text>
-              </Pressable>
             </View>
           </View>
           <View
